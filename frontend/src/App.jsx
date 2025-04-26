@@ -1,4 +1,7 @@
 import './App.css'
+import TopNavigation from "./components/TopNavigation";
+import Footer from "./components/Footer";
+import Category from "./components/Category";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useEffect } from "react";
 import axios from "axios";
@@ -19,17 +22,19 @@ import DishPage from './pages/owner/DishPage';
 import EditDishPage from './pages/owner/EditDishPage';
 import AddDishPage from './pages/owner/AddDishPage';
 
-
 function App() {
   useEffect(() => {
-    axios.get("http://localhost:3000/api/restaurants")
-      .then(res => console.log("✅ Data from backend:", res.data))
-      .catch(err => console.error("❌ Backend connection failed:", err));
+    axios
+      .get("http://localhost:3000/api/restaurants")
+      .then((res) => console.log("✅ Data from backend:", res.data))
+      .catch((err) => console.error("❌ Backend connection failed:", err));
   }, []);
 
   return (
     <>
       <div className="App">
+        <TopNavigation />
+        <Category />
         <h1>MunchMatch</h1>
         <p>Testing backend connection in console...</p>
       </div>
@@ -54,8 +59,8 @@ function App() {
 
         </Routes>
       </Router>
+      <Footer />
     </>
-
   );
 }
 
