@@ -8,4 +8,5 @@ class Restaurant < ApplicationRecord
   validates :description, presence: true
   validates :location, presence: true
   validates :category_id, presence: true
+  validates :logo, presence: true, blob: { content_type: ['image/png', 'image/jpg', 'image/jpeg'] }
 end
