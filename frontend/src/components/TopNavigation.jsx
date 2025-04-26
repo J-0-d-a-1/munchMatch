@@ -2,7 +2,7 @@ function TopNavigation() {
   return (
     <nav className="navbar">
       <span>MunchMatch</span>
-      <p>user</p>
+      <a>user</a>
     </nav>
   );
 }

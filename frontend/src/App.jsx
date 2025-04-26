@@ -5,6 +5,7 @@ import axios from "axios";
 import { useEffect } from "react";
 
 import "./App.css";
+import Footer from "./components/Footer";
 
 function App() {
   useEffect(() => {
@@ -19,6 +20,7 @@ function App() {
       <TopNavigation />
       <h1>MunchMatch</h1>
       <p>Testing backend connection in console...</p>
+      <Footer />
     </div>
   );
 }
