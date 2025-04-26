@@ -9,4 +9,11 @@ class User < ApplicationRecord
   validates :email, presence: true, uniqueness: { case_sensitive: false }
   validates :password, presence: true, confirmation: true, length: { in: 8..15 }
   validates :is_owner, inclusion: { in: [true, false] }
+
+  def self.authenticate_with_credentials(email, password)
+    email = email.downcase.strip
+    user = User.find_by(email: email)
+
+    user && user.authenticate(password) ? user : nil
+  end
 end

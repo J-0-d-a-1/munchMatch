@@ -3,6 +3,5 @@ class Api::SwipesController < ApplicationController
   end
 
   def create
-    user_id = current_user
   end
 end
