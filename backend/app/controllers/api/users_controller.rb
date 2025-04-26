@@ -1,12 +1,19 @@
 class Api::UsersController < ApplicationController
+  # GET /api/users/:id
   def show
-    @user = User.new
+    user = User.find_by(id: params[:id])
+    if user
+      render json: user, except: [:password_digest], status: :ok
+    else
+      render json: { error: 'User not found' }, status: :not_found
+    end
   end
 
+  # POST /api/users
   def create
-    @user = User.new(user_params)
-    if @user.save
-      session[:user_id] = @user.id
+    user = User.new(user_params)
+    if user.save
+      session[:user_id] = user.id
       render json: { message: 'User created successfully.' }, status: :created
     else
       render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity

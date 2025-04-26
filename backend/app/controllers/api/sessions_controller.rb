@@ -1,4 +1,5 @@
 class Api::SessionsController < ApplicationController
+  # POST /api/sessions
   def create
     user = User.authenticate_with_credentials(params[:email], params[:password])
     # If the user exists AND the password entered is correct.
@@ -10,6 +11,7 @@ class Api::SessionsController < ApplicationController
     end
   end
 
+  # DELETE /api/sessions/:id
   def destroy
     session[:user_id] = nil
     render json: { message: 'You are now logged out' }, status: :ok
