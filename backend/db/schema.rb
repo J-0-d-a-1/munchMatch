@@ -79,16 +79,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_26_011940) do
     t.index ["user_id"], name: "index_restaurants_on_user_id"
   end
 
-  create_table "swipes", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.bigint "dish_id", null: false
-    t.string "direction"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["dish_id"], name: "index_swipes_on_dish_id"
-    t.index ["user_id"], name: "index_swipes_on_user_id"
-  end
-
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -105,6 +95,4 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_26_011940) do
   add_foreign_key "favorites", "users"
   add_foreign_key "restaurants", "categories"
   add_foreign_key "restaurants", "users"
-  add_foreign_key "swipes", "dishes"
-  add_foreign_key "swipes", "users"
 end
