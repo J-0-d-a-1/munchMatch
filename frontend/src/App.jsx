@@ -6,6 +6,8 @@ import { useEffect } from "react";
 
 import "./App.css";
 import Footer from "./components/Footer";
+import Category from "./components/Category";
+import MenuCard from "./components/MenuCard";
 
 function App() {
   useEffect(() => {
@@ -18,8 +20,9 @@ function App() {
   return (
     <div className="App">
       <TopNavigation />
+      <Category />
       <h1>MunchMatch</h1>
-      <p>Testing backend connection in console...</p>
+      <MenuCard />
       <Footer />
     </div>
   );

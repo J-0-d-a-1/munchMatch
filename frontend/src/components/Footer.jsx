@@ -1,10 +1,15 @@
+import Container from "react-bootstrap/Container";
+import Navbar from "react-bootstrap/Navbar";
+
 function Footer() {
   return (
-    <nav className="navbar">
-      <a>search</a>
-      <a>fav</a>
-      <a>admin</a>
-    </nav>
+    <Navbar className="bg-body-tertiary">
+      <Container>
+        <Navbar.Brand>🔍</Navbar.Brand>
+        <Navbar.Brand>❤️</Navbar.Brand>
+        <Navbar.Brand>🔓</Navbar.Brand>
+      </Container>
+    </Navbar>
   );
 }
 
