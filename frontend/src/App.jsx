@@ -5,6 +5,7 @@ import Category from "./components/Category";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useEffect } from "react";
 import axios from "axios";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 // Page components for regular users
 import HomePage from './pages/user/HomePage';

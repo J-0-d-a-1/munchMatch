@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
+
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -29,51 +31,47 @@ const Login = () => {
   };
 
   return (
-    <section className="sessions-new">
-      <header className="page-header">
-        <h1>Login</h1>
-      </header>
+    <Container className="mb-5">
+      <Row className="justify-content-md-center">
+        <Col md={6}>
+          <h1 className="text-start mb-4">Login</h1>
 
-      <div className="row">
-        <div className="col-sm-6 col-sm-offset-1">
-          <form onSubmit={handleSubmit}>
+          <Form onSubmit={handleSubmit}>
             {error && (
-              <div className="alert alert-danger">
+              <Alert variant="danger">
                 {error}
-              </div>
+              </Alert>
             )}
 
-            <div className="mb-3">
-              <label htmlFor="email">Email</label>
-              <input
-                type="text"
-                id="email"
+            <Form.Group className="mb-3 text-start" controlId="email">
+              <Form.Label>Email</Form.Label>
+              <Form.Control
+                type="email"
                 name="email"
-                className="form-control"
                 value={formData.email}
                 onChange={handleChange}
+                required
               />
-            </div>
+            </Form.Group>
 
-            <div className="mb-3">
-              <label htmlFor="password">Password</label>
-              <input
+            <Form.Group className="mb-3 text-start" controlId="password">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
                 type="password"
-                id="password"
                 name="password"
-                className="form-control"
                 value={formData.password}
                 onChange={handleChange}
+                required
               />
-            </div>
+            </Form.Group>
 
-            <button type="submit" className="btn btn-primary">
-              Submit
-            </button>
-          </form>
-        </div>
-      </div>
-    </section>
+            <Button variant="primary" type="submit" className="w-100">
+              Login
+            </Button>
+          </Form>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 
