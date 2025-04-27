@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
 
 
-const Login = () => {
+function LoginPage() {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
+  const navigate = useNavigate();
   const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
@@ -15,8 +17,12 @@ const Login = () => {
     try {
       const response = await axios.post('/api/sessions', formData, { withCredentials: true });
       // Handle successful login (e.g., redirect or update auth state)
-      console.log('Login successful:', response.data);
-      // TODO: Redirect user based on role (is_owner) here
+      // console.log('Login successful:', response.data);
+      if (response.data.is_owner) {
+        navigate('/user/restaurants');
+      } else {
+        navigate('/user');
+      }
     } catch (err) {
       setError(err.response?.data?.errors || 'An error occurred during login');
     }
@@ -75,4 +81,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginPage;
