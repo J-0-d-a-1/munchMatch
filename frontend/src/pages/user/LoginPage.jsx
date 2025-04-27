@@ -4,13 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
 
 
-function LoginPage() {
+function LoginPage(props) {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
   const navigate = useNavigate();
   const [error, setError] = useState('');
+  const { user, setUser } = props;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,6 +19,13 @@ function LoginPage() {
       const response = await axios.post('/api/sessions', formData, { withCredentials: true });
       // Handle successful login (e.g., redirect or update auth state)
       // console.log('Login successful:', response.data);
+      setUser(prevUser => ({
+        ...prevUser,
+        id: response.data.id,
+        name: response.data.name,
+        is_owner: response.data.is_owner
+      }));
+      // Redirect based on user type
       if (response.data.is_owner) {
         navigate('/user/restaurants');
       } else {
