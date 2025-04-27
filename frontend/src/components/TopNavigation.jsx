@@ -4,10 +4,6 @@ import Navbar from "react-bootstrap/Navbar";
 import Button from "react-bootstrap/Button";
 import axios from 'axios';
 
-const user = {
-  name: "user1",
-};
-
 function TopNavigation(props) {
   const navigate = useNavigate();
   const {user, setUser} = props;
