@@ -5,7 +5,7 @@ class Api::SessionsController < ApplicationController
     # If the user exists AND the password entered is correct.
     if user
       session[:user_id] = user.id
-      render json: { message: 'Logged in successfully.' }
+      render json: { message: 'Logged in successfully.', name: user.name, is_owner: user.is_owner, id: user.id }
     else
       render json: { errors: ['Invalid email or password'] }, status: :unauthorized
     end
