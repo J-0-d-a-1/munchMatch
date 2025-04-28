@@ -18,10 +18,9 @@ import FavoritesPage from "./pages/user/FavoritesPage";
 // Page components for restaurant owners
 import OwnerPage from "./pages/owner/OwnerPage";
 import RestaurantPage from "./pages/owner/RestaurantPage";
-import DishesPage from "./pages/owner/DishesPage";
 import DishPage from "./pages/owner/DishPage";
-import EditDishPage from "./pages/owner/EditDishPage";
-import AddDishPage from "./pages/owner/AddDishPage";
+import NewRestaurantPage from "./pages/owner/NewRestaurantPage";
+import EditRestaurantPage from "./pages/owner/EditRestaurantPage";
 
 function App() {
   useEffect(() => {
@@ -85,9 +84,12 @@ function App() {
             path="/user/restaurants/:restaurant_id/dishes/:dish_id"
             element={<DishPage />}
           />
+
+          <Route path="/user/restaurants/new" element={<NewRestaurantPage />} />
+
           <Route
             path="/user/restaurants/:restaurant_id/edit"
-            element={<EditDishPage />}
+            element={<EditRestaurantPage />}
           />
         </Routes>
       </Router>

@@ -1,6 +1,7 @@
 class Api::RestaurantsController < ApplicationController
   before_action :set_restaurant, only: %i[show update destroy]
-  before_action :authenticate_user!, only: %i[create update destroy]
+  before_action :authenticate_user!, only: %i[create update destroy] # make sure user is logged in
+  before_action :require_owner, only: %i[create update destroy] # restrict this actions to owners only
 
   # GET /api/restaurants
   def index
@@ -15,22 +16,18 @@ class Api::RestaurantsController < ApplicationController
 
   # POST /api/restaurants
   def create
-    if current_user.is_owner
-      @restaurant = current_user.restaurants.new(restaurant_params)
-      if @restaurant.save
-        render json: @restaurant, status: :created
-      else
-        render json: @restaurant.errors, status: :unprocessable_entity
-      end
+    @restaurant = current_user.restaurants.new(restaurant_params)
+    if @restaurant.save
+      render json: @restaurant, status: :created
     else
-      render json: { error: 'You must be a restaurant owner to create a restaurant' }, status: :unauthorized
+      render json: { errors: @restaurant.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
   # PATCH/PUT /api/restaurants/:id
   def update
     if @restaurant.update(restaurant_params)
-      render json: @restaurant
+      render json: @restaurant, status: :ok
     else
       render json: @restaurant.errors, status: :unprocessable_entity
     end
@@ -46,9 +43,16 @@ class Api::RestaurantsController < ApplicationController
 
   def set_restaurant
     @restaurant = Restaurant.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    render json: { error: 'Restaurant not found' }, status: :not_found
   end
 
   def restaurant_params
     params.require(:restaurant).permit(:name, :description, :location, :category_id, :logo)
+  end
+
+  def require_owner
+    render json: { error: 'You must be a restaurant owner to perform this action' }, status: :unauthorized 
+    unless current_user.is_owner
   end
 end
