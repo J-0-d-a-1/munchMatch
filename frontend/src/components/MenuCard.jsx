@@ -39,6 +39,7 @@ function MenuCard() {
 
   const [currentIndex, setCurrentIndex] = useState(dishCards.length - 1);
   const [lastDirection, setLastDirection] = useState();
+  const lastSwipeDirectionRef = useRef(null);
   const saveSwiped = JSON.parse(localStorage.getItem("swipeHistory")) || [];
   const [swipedHistory, setSwipedHistory] = useState(saveSwiped);
   const currentIndexRef = useRef(currentIndex);
@@ -68,14 +69,17 @@ function MenuCard() {
   const canSwipe = currentIndex >= 0;
 
   // set last direction
-  const swiped = (direction, index) => {
+  const swiped = (direction) => {
     setLastDirection(direction);
-    updateCurrentIndex(index - 1);
+    lastSwipeDirectionRef.current = direction;
   };
 
   // handle the case in which go back is pressed before card goes outOfFrame
   const outOfFrame = (name, index) => {
-    currentIndexRef.current >= index && childRefs[index].current.restoreCard();
+    if (currentIndexRef.current >= index) {
+      childRefs[index].current.restoreCard();
+      updateCurrentIndex(index - 1);
+    }
   };
 
   const handleSwipe = async (direction) => {
@@ -135,10 +139,13 @@ function MenuCard() {
 
     // Move back to former index
     const newIndex = currentIndex + 1;
-    updateCurrentIndex(newIndex);
 
-    // Restore the current dishCard
-    await childRefs[newIndex].current.restoreCard();
+    // Restore the currend dishCard
+    if (childRefs[newIndex]?.current) {
+      await childRefs[newIndex].current.restoreCard();
+    }
+
+    updateCurrentIndex(newIndex);
 
     // Remove last swipe record history
     setSwipedHistory((prev) => {
@@ -155,30 +162,33 @@ function MenuCard() {
     <div>
       <h1>What are you munching today?</h1>
       <div className="card-container">
-        {dishCards.map((dish, index) => (
-          <TinderCard
-            key={dish.id}
-            ref={childRefs[index]}
-            className="swipe"
-            preventSwipe={["up", "down"]}
-            onSwipe={(direction) => swiped(direction, index)}
-            onCardLeftScreen={() => outOfFrame(dish.name, index)}
-          >
-            <Card
-              style={{
-                width: "18rem",
-              }}
-            >
-              <Card.Body>
-                <Card.Img
-                  src={dish.photo_url}
-                  style={{ width: "200px", height: "200px" }}
-                />
-                <Card.Title className="card-title">{dish.name}</Card.Title>
-              </Card.Body>
-            </Card>
-          </TinderCard>
-        ))}
+        {dishCards.map(
+          (dish, index) =>
+            index <= currentIndex && (
+              <TinderCard
+                key={dish.id}
+                ref={childRefs[index]}
+                className="swipe"
+                preventSwipe={["up", "down"]}
+                onSwipe={(direction) => swiped(direction)}
+                onCardLeftScreen={() => outOfFrame(dish.name, index)}
+              >
+                <Card
+                  style={{
+                    width: "18rem",
+                  }}
+                >
+                  <Card.Body>
+                    <Card.Img
+                      src={dish.photo_url}
+                      style={{ width: "200px", height: "200px" }}
+                    />
+                    <Card.Title className="card-title">{dish.name}</Card.Title>
+                  </Card.Body>
+                </Card>
+              </TinderCard>
+            )
+        )}
         <div className="btn-container">
           <Button variant="danger" onClick={() => handleSwipe("left")}>
             Nah!
