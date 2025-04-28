@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
@@ -6,6 +7,14 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
 function NewRestaurantPage() {
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/api/categories")
+      .then((res) => setCategories(res.data))
+      .catch((err) => console.error(err));
+  }, []);
+
+  const [categories, setCategories] = useState([]);
   const [validated, setValidated] = useState(false);
 
   const [restaurantData, setRestaurantData] = useState({
@@ -17,6 +26,14 @@ function NewRestaurantPage() {
   });
 
   const [dishes, setDishes] = useState([]);
+
+  const parsedCategories = categories.map((category) => {
+    return (
+      <option key={category.id} value={category.id}>
+        {category.name}
+      </option>
+    );
+  });
 
   const handleSubmit = (event) => {
     const form = event.currentTarget;
@@ -53,11 +70,11 @@ function NewRestaurantPage() {
             {/* {errors.file} */}
           </Form.Control.Feedback>
         </Form.Group>
-        <Form.Group className="mb-3" controlId="validationCustomRestaurantName">
+        <Form.Group className="mb-3">
           <Form.Label>Restaurant&apos;s name</Form.Label>
           <Form.Control
             type="text"
-            name="restaurant's name"
+            name="name"
             required
             onChange={handleChange}
           />
@@ -65,7 +82,7 @@ function NewRestaurantPage() {
             This field can&apos;t be empty.
           </Form.Control.Feedback>
         </Form.Group>
-        <Form.Group className="mb-3" controlId="validationCustomDescription">
+        <Form.Group className="mb-3">
           <Form.Label>Description</Form.Label>
           <Form.Control
             as="textarea"
@@ -78,25 +95,27 @@ function NewRestaurantPage() {
             This field can&apos;t be empty.
           </Form.Control.Feedback>
         </Form.Group>
-        <Form.Group className="mb-3" controlId="validationCustomCategory">
+        <Form.Group className="mb-3">
           <Form.Label>Select a category</Form.Label>
-          <Form.Select>
+          <Form.Select
+            id="category"
+            name="category"
+            required
+            onChange={handleChange}
+          >
             <option>Select a category</option>
-            <option>Comfort</option>
-            <option>Indian</option>
-            <option>Japanese</option>
-            <option>Mexican</option>
+            {parsedCategories}
           </Form.Select>
         </Form.Group>
-        <Form.Group className="mb-3" controlId="validationCustomLocation">
+        <Form.Group className="mb-3">
           <Form.Label>Location</Form.Label>
         </Form.Group>
         <Row className="mb-3">
-          <Form.Group as={Col} md="6" controlId="validationCustom03">
+          <Form.Group as={Col} md="6">
             <Form.Label>Address</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Address"
+              placeholder="Street number and name"
               name="address"
               required
               onChange={handleChange}
@@ -105,11 +124,10 @@ function NewRestaurantPage() {
               Please provide a valid address.
             </Form.Control.Feedback>
           </Form.Group>
-          <Form.Group as={Col} md="6" controlId="validationCustom03">
+          <Form.Group as={Col} md="6">
             <Form.Label>City</Form.Label>
             <Form.Control
               type="text"
-              placeholder="City"
               name="city"
               required
               onChange={handleChange}
@@ -118,11 +136,10 @@ function NewRestaurantPage() {
               Please provide a valid city.
             </Form.Control.Feedback>
           </Form.Group>
-          <Form.Group as={Col} md="3" controlId="validationCustom04">
+          <Form.Group as={Col} md="3">
             <Form.Label>Province</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Province"
               name="province"
               required
               onChange={handleChange}
@@ -131,11 +148,10 @@ function NewRestaurantPage() {
               Please provide a valid Province.
             </Form.Control.Feedback>
           </Form.Group>
-          <Form.Group as={Col} md="3" controlId="validationCustom04">
+          <Form.Group as={Col} md="3">
             <Form.Label>Country</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Country"
               name="country"
               required
               onChange={handleChange}
@@ -144,11 +160,10 @@ function NewRestaurantPage() {
               Please provide a valid Country.
             </Form.Control.Feedback>
           </Form.Group>
-          <Form.Group as={Col} md="3" controlId="validationCustom05">
+          <Form.Group as={Col} md="3">
             <Form.Label>Postal Code</Form.Label>
             <Form.Control
               type="text"
-              placeholder="PostalCode"
               name="postal code"
               required
               onChange={handleChange}
@@ -158,7 +173,7 @@ function NewRestaurantPage() {
             </Form.Control.Feedback>
           </Form.Group>
         </Row>
-        <fieldset>
+        <fieldset className="mb-3">
           <legend>Create a dish</legend>
           <Form.Group className="position-relative mb-3">
             <Form.Label>Photo</Form.Label>
@@ -173,7 +188,7 @@ function NewRestaurantPage() {
               {/* {errors.file} */}
             </Form.Control.Feedback>
           </Form.Group>
-          <Form.Group className="mb-3" controlId="validationCustomDishName">
+          <Form.Group className="mb-3">
             <Form.Label>Dish name</Form.Label>
             <Form.Control
               type="text"
@@ -185,10 +200,7 @@ function NewRestaurantPage() {
               This field can&apos;t be empty.
             </Form.Control.Feedback>
           </Form.Group>
-          <Form.Group
-            className="mb-3"
-            controlId="validationCustomDishDescription"
-          >
+          <Form.Group className="mb-3">
             <Form.Label>Description</Form.Label>
             <Form.Control
               as="textarea"
@@ -202,7 +214,7 @@ function NewRestaurantPage() {
             </Form.Control.Feedback>
           </Form.Group>
           <Form.Label>Price</Form.Label>
-          <InputGroup className="mb-3" controlId="validationCustomPrice">
+          <InputGroup className="mb-3">
             <InputGroup.Text>$</InputGroup.Text>
             <Form.Control
               aria-label="Amount"
