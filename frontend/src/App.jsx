@@ -23,12 +23,12 @@ import NewRestaurantPage from "./pages/owner/NewRestaurantPage";
 import EditRestaurantPage from "./pages/owner/EditRestaurantPage";
 
 function App() {
-  useEffect(() => {
-    axios
-      .get("http://localhost:3000/api/restaurants")
-      .then((res) => console.log("✅ Data from backend:", res.data))
-      .catch((err) => console.error("❌ Backend connection failed:", err));
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get("http://localhost:3000/api/restaurants")
+  //     .then((res) => console.log("✅ Data from backend:", res.data))
+  //     .catch((err) => console.error("❌ Backend connection failed:", err));
+  // }, []);
 
   // Save current user login info
   const [user, setUser] = useState(null);
