@@ -35,16 +35,24 @@ const data = [
 ];
 
 function MenuCard() {
-  const disheCards = data;
+  const dishCards = data;
 
-  const [currentIndex, setCurrentIndex] = useState(disheCards.length - 1);
+  const [currentIndex, setCurrentIndex] = useState(dishCards.length - 1);
   const [lastDirection, setLastDirection] = useState();
+  const saveSwiped = JSON.parse(localStorage.getItem("swipeHistory")) || [];
+  const [swipedHistory, setSwipedHistory] = useState(saveSwiped);
   const currentIndexRef = useRef(currentIndex);
 
-  // creating an array of refs (childRefs) for each dish of disheCards array -> to interact actual DOM individually
+  // initializing stored history from localstrage
+  useEffect(() => {
+    const storedHistory = localStorage.getItem("swipeHistory");
+    if (storedHistory) setSwipedHistory(JSON.parse(storedHistory));
+  }, []);
+
+  // creating an array of refs (childRefs) for each dish of dishCards array -> to interact actual DOM individually
   const childRefs = useMemo(
     () =>
-      Array(disheCards.length)
+      Array(dishCards.length)
         .fill(0)
         .map((i) => React.createRef()),
     []
@@ -55,7 +63,7 @@ function MenuCard() {
     currentIndexRef.current = index;
   };
 
-  const canGoBack = currentIndex < disheCards.length - 1;
+  const canGoBack = currentIndex < dishCards.length - 1;
 
   const canSwipe = currentIndex >= 0;
 
@@ -65,30 +73,89 @@ function MenuCard() {
     updateCurrentIndex(index - 1);
   };
 
+  // handle the case in which go back is pressed before card goes outOfFrame
   const outOfFrame = (name, index) => {
     currentIndexRef.current >= index && childRefs[index].current.restoreCard();
   };
 
-  const swipe = async (direction) => {
-    if (canSwipe && currentIndex < disheCards.length) {
-      // Swipe dish card
+  const handleSwipe = async (direction) => {
+    if (canSwipe && currentIndex < dishCards.length) {
+      // Trigger swipe action/animation
       await childRefs[currentIndex].current.swipe(direction);
+
+      // Capture the current dish id
+      const currentDishId = dishCards[currentIndex].id;
+
+      // Update swipe history and state
+      setSwipedHistory((prev) => {
+        const exisitingSwipe = prev.find(
+          (entry) => entry.dish_id === currentDishId
+        );
+
+        let updatedHistory;
+        if (exisitingSwipe) {
+          // increment the appropriate swipe count
+          updatedHistory = prev.map((entry) =>
+            entry.dish_id === currentDishId
+              ? {
+                  ...entry,
+                  right_swipes:
+                    direction === "right"
+                      ? exisitingSwipe.right_swipes + 1
+                      : exisitingSwipe.right_swipes,
+                  left_swipes:
+                    direction === "left"
+                      ? exisitingSwipe.left_swipes + 1
+                      : exisitingSwipe.left_swipes,
+                }
+              : entry
+          );
+        } else {
+          updatedHistory = [
+            ...prev,
+            {
+              dish_id: currentDishId,
+              right_swipes: direction === "right" ? 1 : 0,
+              left_swipes: direction === "left" ? 1 : 0,
+            },
+          ];
+        }
+
+        // storing swipeHistory in local sotrage
+        localStorage.setItem("swipeHistory", JSON.stringify(updatedHistory));
+
+        return updatedHistory;
+      });
     }
   };
 
-  // increase current index and show card
-  const goBack = async () => {
+  // undo swipe
+  const handleUndoSwipe = async () => {
     if (!canGoBack) return;
+
+    // Move back to former index
     const newIndex = currentIndex + 1;
     updateCurrentIndex(newIndex);
+
+    // Restore the current dishCard
     await childRefs[newIndex].current.restoreCard();
+
+    // Remove last swipe record history
+    setSwipedHistory((prev) => {
+      const updateHistory = prev.slice(0, prev.length - 1);
+
+      // update localStorage
+      localStorage.setItem("swipeHistory", JSON.stringify(updateHistory));
+
+      return updateHistory;
+    });
   };
 
   return (
     <div>
       <h1>What are you munching today?</h1>
       <div className="card-container">
-        {disheCards.map((dish, index) => (
+        {dishCards.map((dish, index) => (
           <TinderCard
             key={dish.id}
             ref={childRefs[index]}
@@ -113,13 +180,13 @@ function MenuCard() {
           </TinderCard>
         ))}
         <div className="btn-container">
-          <Button variant="danger" onClick={() => swipe("left")}>
+          <Button variant="danger" onClick={() => handleSwipe("left")}>
             Nah!
           </Button>
-          <Button variant="warning" onClick={() => goBack()}>
+          <Button variant="warning" onClick={() => handleUndoSwipe()}>
             Undo Swipe
           </Button>
-          <Button variant="success" onClick={() => swipe("right")}>
+          <Button variant="success" onClick={() => handleSwipe("right")}>
             Yum!
           </Button>
         </div>
