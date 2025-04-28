@@ -33,6 +33,20 @@ function App() {
 
   // Save current user login info
   const [user, setUser] = useState(null);
+  // Check session when app loads
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const response = await axios.get('/api/sessions/current', { withCredentials: true });
+        if (response.data.user) {
+          setUser(response.data.user);
+        }
+      } catch (err) {
+        console.error('Session check failed:', err);
+      }
+    };
+    checkSession();
+  }, []);
 
   return (
     <>
