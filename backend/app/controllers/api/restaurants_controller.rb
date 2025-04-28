@@ -5,8 +5,8 @@ class Api::RestaurantsController < ApplicationController
 
   # GET /api/restaurants
   def index
-    @restaurants = Restaurant.all
-    render json: @restaurants
+    @restaurants = current_user.restaurants
+    render json: @restaurants, except: [:created_at, :updated_at]
   end
 
   # GET /api/restaurants/:id

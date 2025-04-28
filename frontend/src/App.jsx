@@ -57,8 +57,6 @@ function App() {
         <div className="App">
           <TopNavigation user={user} setUser={setUser} />
           <Category categories={categories} />
-          <h1>MunchMatch</h1>
-          <p>Testing backend connection in console...</p>
         </div>
         <Routes>
           {/* Common routes */}
