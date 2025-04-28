@@ -23,12 +23,14 @@ import NewRestaurantPage from "./pages/owner/NewRestaurantPage";
 import EditRestaurantPage from "./pages/owner/EditRestaurantPage";
 
 function App() {
-  // useEffect(() => {
-  //   axios
-  //     .get("http://localhost:3000/api/restaurants")
-  //     .then((res) => console.log("✅ Data from backend:", res.data))
-  //     .catch((err) => console.error("❌ Backend connection failed:", err));
-  // }, []);
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/api/categories")
+      .then((res) => setCategories(res.data))
+      .catch((err) => console.error(err));
+  }, []);
 
   // Save current user login info
   const [user, setUser] = useState(null);
@@ -54,7 +56,7 @@ function App() {
       <Router>
         <div className="App">
           <TopNavigation user={user} setUser={setUser} />
-          <Category />
+          <Category categories={categories} />
           <h1>MunchMatch</h1>
           <p>Testing backend connection in console...</p>
         </div>
@@ -85,7 +87,10 @@ function App() {
             element={<DishPage />}
           />
 
-          <Route path="/user/restaurants/new" element={<NewRestaurantPage />} />
+          <Route
+            path="/user/restaurants/new"
+            element={<NewRestaurantPage categories={categories} />}
+          />
 
           <Route
             path="/user/restaurants/:restaurant_id/edit"

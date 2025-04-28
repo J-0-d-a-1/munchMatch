@@ -6,15 +6,7 @@ import InputGroup from "react-bootstrap/InputGroup";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
-function NewRestaurantPage() {
-  useEffect(() => {
-    axios
-      .get("http://localhost:3000/api/categories")
-      .then((res) => setCategories(res.data))
-      .catch((err) => console.error(err));
-  }, []);
-
-  const [categories, setCategories] = useState([]);
+function NewRestaurantPage({ categories }) {
   const [validated, setValidated] = useState(false);
 
   const [restaurantData, setRestaurantData] = useState({
