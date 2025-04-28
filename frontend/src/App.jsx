@@ -37,12 +37,14 @@ function App() {
   useEffect(() => {
     const checkSession = async () => {
       try {
-        const response = await axios.get('/api/sessions/current', { withCredentials: true });
+        const response = await axios.get("/api/sessions/current", {
+          withCredentials: true,
+        });
         if (response.data.user) {
           setUser(response.data.user);
         }
       } catch (err) {
-        console.error('Session check failed:', err);
+        console.error("Session check failed:", err);
       }
     };
     checkSession();
@@ -78,21 +80,14 @@ function App() {
             path="/user/restaurants/:restaurant_id"
             element={<RestaurantPage />}
           />
-          <Route
-            path="/user/restaurants/:restaurant_id/dishes"
-            element={<DishesPage />}
-          />
+
           <Route
             path="/user/restaurants/:restaurant_id/dishes/:dish_id"
             element={<DishPage />}
           />
           <Route
-            path="/user/restaurants/:restaurant_id/dishes/:dish_id/edit"
+            path="/user/restaurants/:restaurant_id/edit"
             element={<EditDishPage />}
-          />
-          <Route
-            path="/user/restaurants/:restaurant_id/dishes/new"
-            element={<AddDishPage />}
           />
         </Routes>
       </Router>
