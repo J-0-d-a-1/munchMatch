@@ -93,10 +93,7 @@ GEM
     drb (2.2.1)
     erubi (1.13.1)
     ffi (1.17.2-arm64-darwin)
-<<<<<<< HEAD
-=======
     ffi (1.17.2-x86_64-darwin)
->>>>>>> 8cffc2ad2feafee39a2d3f0f1c70858a991753d1
     globalid (1.2.1)
       activesupport (>= 6.1)
     i18n (1.14.7)
