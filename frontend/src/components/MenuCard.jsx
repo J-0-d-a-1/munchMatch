@@ -1,129 +1,203 @@
-import React, { useState, useMemo, useRef } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import TinderCard from "react-tinder-card";
+import { Card, Button } from "react-bootstrap";
 
 import "../Temp.css";
 
-const cards = [
+const data = [
   {
-    name: "Mexican",
-    url: "../mock_image/mexican.png",
+    id: 1,
+    name: "Sushi",
+    description: "Japanese Traditional food",
+    restaurant_id: 1,
+    prince_in_cent: 2000,
+    photo_url: "../../../mock_image/japanese.png",
+    category_id: 1,
   },
   {
-    name: "Japanese",
-    url: "../mock_image/japanese.png",
+    id: 2,
+    name: "Curry",
+    description: "Indian Traditional food",
+    restaurant_id: 2,
+    prince_in_cent: 2000,
+    photo_url: "../../../mock_image/indian.png",
+    category_id: 2,
   },
   {
-    name: "Indian",
-    url: "../mock_image/indian.png",
+    id: 3,
+    name: "Tacos",
+    description: "Mexican Traditional food",
+    restaurant_id: 3,
+    prince_in_cent: 2000,
+    photo_url: "../../../mock_image/mexican.png",
+    category_id: 3,
   },
 ];
 
 function MenuCard() {
-  const [currentIndex, setCurrentIndex] = useState(cards.length - 1);
+  const dishCards = data;
+
+  const [currentIndex, setCurrentIndex] = useState(dishCards.length - 1);
   const [lastDirection, setLastDirection] = useState();
-  // used for outOfFrame closure
+  const saveSwiped = JSON.parse(localStorage.getItem("swipeHistory")) || [];
+  const [swipedHistory, setSwipedHistory] = useState(saveSwiped);
   const currentIndexRef = useRef(currentIndex);
 
+  // initializing stored history from localstrage
+  useEffect(() => {
+    const storedHistory = localStorage.getItem("swipeHistory");
+    if (storedHistory) setSwipedHistory(JSON.parse(storedHistory));
+  }, []);
+
+  // creating an array of refs (childRefs) for each dish of dishCards array -> to interact actual DOM individually
   const childRefs = useMemo(
     () =>
-      Array(cards.length)
+      Array(dishCards.length)
         .fill(0)
         .map((i) => React.createRef()),
     []
   );
 
-  const updateCurrentIndex = (val) => {
-    setCurrentIndex(val);
-    currentIndexRef.current = val;
+  const updateCurrentIndex = (index) => {
+    setCurrentIndex(index);
+    currentIndexRef.current = index;
   };
 
-  const canGoBack = currentIndex < cards.length - 1;
+  const canGoBack = currentIndex < dishCards.length - 1;
 
   const canSwipe = currentIndex >= 0;
 
-  // set last direction and decrease current index
-  const swiped = (direction, nameToDelete, index) => {
+  // set last direction
+  const swiped = (direction, index) => {
     setLastDirection(direction);
     updateCurrentIndex(index - 1);
   };
 
-  const outOfFrame = (name, idx) => {
-    console.log(`${name} (${idx}) left the screen!`, currentIndexRef.current);
-    // handle the case in which go back is pressed before card goes outOfFrame
-    currentIndexRef.current >= idx && childRefs[idx].current.restoreCard();
-    // TODO: when quickly swipe and restore multiple times the same card,
-    // it happens multiple outOfFrame events are queued and the card disappear
-    // during latest swipes. Only the last outOfFrame event should be considered valid
+  // handle the case in which go back is pressed before card goes outOfFrame
+  const outOfFrame = (name, index) => {
+    currentIndexRef.current >= index && childRefs[index].current.restoreCard();
   };
 
-  const swipe = async (dir) => {
-    if (canSwipe && currentIndex < cards.length) {
-      await childRefs[currentIndex].current.swipe(dir); // Swipe the card!
+  const handleSwipe = async (direction) => {
+    if (canSwipe && currentIndex < dishCards.length) {
+      // Trigger swipe action/animation
+      await childRefs[currentIndex].current.swipe(direction);
+
+      // Capture the current dish id
+      const currentDishId = dishCards[currentIndex].id;
+
+      // Update swipe history and state
+      setSwipedHistory((prev) => {
+        const exisitingSwipe = prev.find(
+          (entry) => entry.dish_id === currentDishId
+        );
+
+        let updatedHistory;
+        if (exisitingSwipe) {
+          // increment the appropriate swipe count
+          updatedHistory = prev.map((entry) =>
+            entry.dish_id === currentDishId
+              ? {
+                  ...entry,
+                  right_swipes:
+                    direction === "right"
+                      ? exisitingSwipe.right_swipes + 1
+                      : exisitingSwipe.right_swipes,
+                  left_swipes:
+                    direction === "left"
+                      ? exisitingSwipe.left_swipes + 1
+                      : exisitingSwipe.left_swipes,
+                }
+              : entry
+          );
+        } else {
+          updatedHistory = [
+            ...prev,
+            {
+              dish_id: currentDishId,
+              right_swipes: direction === "right" ? 1 : 0,
+              left_swipes: direction === "left" ? 1 : 0,
+            },
+          ];
+        }
+
+        // storing swipeHistory in local sotrage
+        localStorage.setItem("swipeHistory", JSON.stringify(updatedHistory));
+
+        return updatedHistory;
+      });
     }
   };
 
-  // increase current index and show card
-  const goBack = async () => {
+  // undo swipe
+  const handleUndoSwipe = async () => {
     if (!canGoBack) return;
+
+    // Move back to former index
     const newIndex = currentIndex + 1;
     updateCurrentIndex(newIndex);
+
+    // Restore the current dishCard
     await childRefs[newIndex].current.restoreCard();
+
+    // Remove last swipe record history
+    setSwipedHistory((prev) => {
+      const updateHistory = prev.slice(0, prev.length - 1);
+
+      // update localStorage
+      localStorage.setItem("swipeHistory", JSON.stringify(updateHistory));
+
+      return updateHistory;
+    });
   };
 
   return (
     <div>
       <h1>What are you munching today?</h1>
-      <div className="cardContainer">
-        {cards.map((character, index) => (
+      <div className="card-container">
+        {dishCards.map((dish, index) => (
           <TinderCard
+            key={dish.id}
             ref={childRefs[index]}
             className="swipe"
-            key={character.name}
-            onSwipe={(dir) => swiped(dir, character.name, index)}
-            onCardLeftScreen={() => outOfFrame(character.name, index)}
+            preventSwipe={["up", "down"]}
+            onSwipe={(direction) => swiped(direction, index)}
+            onCardLeftScreen={() => outOfFrame(dish.name, index)}
           >
-            <div
+            <Card
               style={{
-                backgroundImage: "url(" + character.url + ")",
-                width: "200px",
-                height: "200px",
+                width: "18rem",
               }}
-              className="card"
             >
-              <h3>{character.name}</h3>
-            </div>
+              <Card.Body>
+                <Card.Img
+                  src={dish.photo_url}
+                  style={{ width: "200px", height: "200px" }}
+                />
+                <Card.Title className="card-title">{dish.name}</Card.Title>
+              </Card.Body>
+            </Card>
           </TinderCard>
         ))}
+        <div className="btn-container">
+          <Button variant="danger" onClick={() => handleSwipe("left")}>
+            Nah!
+          </Button>
+          <Button variant="warning" onClick={() => handleUndoSwipe()}>
+            Undo Swipe
+          </Button>
+          <Button variant="success" onClick={() => handleSwipe("right")}>
+            Yum!
+          </Button>
+        </div>
+        {lastDirection ? (
+          <h3 key={lastDirection} className="light">
+            You swiped {lastDirection}
+          </h3>
+        ) : (
+          <h3 className="light">Swipe a card or press button!</h3>
+        )}
       </div>
-      <div className="buttons">
-        <button
-          style={{ backgroundColor: !canSwipe && "#c3c4d3" }}
-          onClick={() => swipe("left")}
-        >
-          Swipe left!
-        </button>
-        <button
-          style={{ backgroundColor: !canGoBack && "#c3c4d3" }}
-          onClick={() => goBack()}
-        >
-          Undo swipe!
-        </button>
-        <button
-          style={{ backgroundColor: !canSwipe && "#c3c4d3" }}
-          onClick={() => swipe("right")}
-        >
-          Swipe right!
-        </button>
-      </div>
-      {lastDirection ? (
-        <h2 key={lastDirection} className="infoText">
-          You swiped {lastDirection}
-        </h2>
-      ) : (
-        <h2 className="infoText">
-          Swipe a card or press a button to get Restore Card button visible!
-        </h2>
-      )}
     </div>
   );
 }
