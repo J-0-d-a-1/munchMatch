@@ -2,7 +2,11 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   namespace :api do
     resources :users, only: %i[show create]
-    resources :sessions, only: %i[create destroy]
+    resources :sessions, only: %i[create destroy current] do
+      collection do
+        get :current
+      end
+    end
     resources :categories, only: %i[index show]
     resources :restaurants
     resources :dishes

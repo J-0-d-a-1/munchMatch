@@ -1,4 +1,20 @@
 class Api::SessionsController < ApplicationController
+  # GET /api/current_user
+  def current
+    if session[:user_id]
+      user = User.find_by(id: session[:user_id])
+      render json: { 
+        user: {
+          id: user.id,
+          name: user.name,
+          is_owner: user.is_owner
+        }
+      }
+    else
+      render json: { user: nil }
+    end
+  end
+    
   # POST /api/sessions
   def create
     user = User.authenticate_with_credentials(params[:email], params[:password])
