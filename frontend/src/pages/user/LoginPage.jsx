@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
 
 
@@ -82,6 +82,11 @@ function LoginPage(props) {
             <Button variant="primary" type="submit" className="w-100">
               Login
             </Button>
+
+            <Form.Text className="text-center d-block mt-3">
+              New to MunchMatch? <Link to="/signup">Sign Up</Link>
+            </Form.Text>
+            
           </Form>
         </Col>
       </Row>

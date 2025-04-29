@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
 import axios from 'axios';
+import { useNavigate, Link } from 'react-router-dom';
+import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
 
 function SignupPage() {
   const navigate = useNavigate();
@@ -126,6 +126,11 @@ function SignupPage() {
             <Button variant="primary" type="submit" className="w-100">
               Sign Up
             </Button>
+
+            <Form.Text className="text-center d-block mt-3">
+              Already have an account? <Link to="/login">Log In</Link>
+            </Form.Text>
+
           </Form>
         </Col>
       </Row>
