@@ -1,12 +1,60 @@
-import React from 'react';
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import "../../../styles/dish.scss";
 
-function RestaurantMenuPage() {
-  return (
-    <div>
-      <h1>Restaurant Menu Page</h1>
-      <p>Explore the menu of the selected restaurant.</p>
+function DishesList() {
+  const { restaurant_id } = useParams(); // restaurant ID from the URL
+  const [dishes, setDishes] = useState([]);
+  const [restaurant, setRestaurant] = useState();
+
+  useEffect(() => {
+    axios.get(`/api/restaurants/${restaurant_id}`).then((res) => {
+      setRestaurant(res.data);
+    });
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get(`/api/restaurants/${restaurant_id}/dishes`) // now dynamic!
+      .then((res) => setDishes(res.data))
+      .catch((err) => console.error(err));
+  }, [restaurant_id]);
+
+  // Format price
+  const formatPrice = (priceInCents) => {
+    return `$${(priceInCents / 100).toFixed(2)} CAD`;
+  };
+
+  // Map dishes
+  const parsedDishes = dishes.map((dish) => (
+    <div key={dish.id} className="dish-list__item">
+      <h2>{dish.name}</h2>
+      <img className="dish-list__image" src={dish.photo_url} alt={dish.name} />
+      <div className="dish__dedescription">
+        <p>{dish.description}</p>
+        <div className="photo-list__dish-price">
+          <p>{formatPrice(dish.price_in_cents)}</p>
+        </div>
+      </div>
     </div>
+  ));
+
+  return (
+    <>
+      {restaurant && (
+        <div className="restaurant-header">
+          {restaurant.logo_url && (
+            <img src={restaurant.logo_url} alt={`${restaurant.name} logo`} />
+          )}
+          <h2>{restaurant.name}</h2>
+          <h5>{restaurant.description}</h5>
+        </div>
+      )}
+
+      <div>{parsedDishes}</div>
+    </>
   );
 }
 
-export default RestaurantMenuPage;
+export default DishesList;
