@@ -1,12 +1,11 @@
 class Api::DishesController < ApplicationController
   before_action :set_dish, only: %i[show update destroy]
-  # before_action :authenticate_user!, only: %i[create update destroy]
   before_action :require_owner, only: %i[create update destroy] # restrict this actions to owners only
 
   # GET /api/restaurants/:restaurant_id/dishes
   # show dishes of a specific restaurant
   def index
-    @restaurant = Restaurant.find(params[:restaurant_id]) # Find the restaurant first
+    @restaurant = Restaurant.find(params[:restaurant_id]) # Find the restaurant
     @dishes = @restaurant.dishes # Get the dishes associated with that restaurant
     render json: @dishes
   end
