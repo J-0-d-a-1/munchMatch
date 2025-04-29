@@ -19,7 +19,7 @@ function LoginPage() {
     e.preventDefault();
     try {
       const response = await axios.post('/api/sessions', formData, { withCredentials: true });
-      // Handle successful login (e.g., redirect or update auth state)
+      // Handle successful login
       setUser(response.data);
       navigate(location.state?.from || '/');
     } catch (err) {
