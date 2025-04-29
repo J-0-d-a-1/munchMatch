@@ -1,5 +1,6 @@
 class Api::DishesController < ApplicationController
-  before_action :require_owner, only: %i[index create update destroy]
+  before_action :set_restaurant, only: %i[index create]
+  before_action :require_owner, only: %i[create update destroy] # restrict this actions to owners only
   before_action :set_dish, only: %i[show update destroy]
   include Rails.application.routes.url_helpers
 
@@ -13,8 +14,8 @@ class Api::DishesController < ApplicationController
   # GET /api/dishes
   # Show all dishes from all restaurants
   def all
-    @dishes = Dish.all
-    render json: dish_with_photo_url(@dishes)
+    @dishes = Dish.all.with_attached_photo
+    render json: @dishes.map { |dish| dish_with_photo_url(dish) }
   end
 
   # GET /api/dishes/:id
@@ -53,14 +54,17 @@ class Api::DishesController < ApplicationController
 
   private
 
-  # rubocop:disable Style/GuardClause, Style/IfUnlessModifier
+  def set_restaurant
+    @restaurant = Restaurant.find_by(id: params[:restaurant_id])
+  end
+
+  # rubocop:disable Style/GuardClause
   def require_owner
-    @restaurant = current_user.restaurants.find_by(id: params[:restaurant_id])
-    unless @restaurant
+    unless current_user && @restaurant && @restaurant.user_id == current_user.id
       render json: { error: 'Restaurant not found or you are not the owner' }, status: :not_found
     end
   end
-  # rubocop:enable Style/GuardClause, Style/IfUnlessModifier
+  # rubocop:enable Style/GuardClause
 
   def set_dish
     @dish = Dish.find(params[:id])

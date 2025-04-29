@@ -1,5 +1,6 @@
 class Api::RestaurantsController < ApplicationController
-  before_action :require_owner, only: %i[create update destroy]
+  before_action :set_restaurant, only: %i[show update destroy]
+  before_action :require_owner, only: %i[create update destroy] # restrict this actions to owners only
   include Rails.application.routes.url_helpers
 
   # GET /api/restaurants
@@ -44,16 +45,19 @@ class Api::RestaurantsController < ApplicationController
 
   private
 
-  # rubocop:disable Style/GuardClause, Style/IfUnlessModifier
-  def require_owner
-    @restaurant = current_user.restaurants.find_by(id: params[:restaurant_id])
-    unless @restaurant
-      render json: { error: 'Restaurant not found or you are not the owner' }, status: :not_found
-    end
+  def set_restaurant
+    @restaurant = Restaurant.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    render json: { error: 'Restaurant not found' }, status: :not_found
   end
-  # rubocop:enable Style/GuardClause, Style/IfUnlessModifier
 
   def restaurant_params
     params.require(:restaurant).permit(:name, :description, :location, :category_id, :logo)
+  end
+
+  def require_owner
+    return if current_user.is_owner
+
+    render json: { error: 'You must be a restaurant owner to perform this action' }, status: :unauthorized
   end
 end
