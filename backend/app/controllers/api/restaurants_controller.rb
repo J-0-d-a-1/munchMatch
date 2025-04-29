@@ -1,28 +1,26 @@
 class Api::RestaurantsController < ApplicationController
-  before_action :set_restaurant, only: %i[show update destroy]
-  before_action :require_owner, only: %i[create update destroy] # restrict this actions to owners only
+  before_action :require_owner, only: %i[create update destroy]
   include Rails.application.routes.url_helpers
 
   # GET /api/restaurants
   def index
     @restaurants = current_user.restaurants
-    render json: @restaurants, except: %i[created_at updated_at]
+    render json: @restaurants.as_json(except: %i[created_at updated_at])
   end
 
   # GET /api/restaurants/:id
   def show
-    restaurant = Restaurant.find(params[:id])
-
-    render json: restaurant.as_json(except: %i[created_at updated_at]).merge({
-                                                                               logo_url: restaurant.logo.attached? ? url_for(restaurant.logo) : nil
-                                                                             })
+    render json: @restaurant.as_json(except: %i[created_at updated_at]).merge({
+                                                                                logo_url: @restaurant.logo&.attached? ? url_for(@restaurant.logo) : nil
+                                                                              })
   end
 
   # POST /api/restaurants
   def create
     @restaurant = current_user.restaurants.new(restaurant_params)
     if @restaurant.save
-      render json: @restaurant, status: :created
+      render json: @restaurant.as_json(except: %i[created_at updated_at]).merge({ logo_url: @restaurant.logo&.attached? ? url_for(@restaurant.logo) : nil }),
+             status: :created
     else
       render json: { errors: @restaurant.errors.full_messages }, status: :unprocessable_entity
     end
@@ -31,7 +29,8 @@ class Api::RestaurantsController < ApplicationController
   # PATCH/PUT /api/restaurants/:id
   def update
     if @restaurant.update(restaurant_params)
-      render json: @restaurant, status: :ok
+      render json: @restaurant.as_json(except: %i[created_at updated_at]).merge({ logo_url: @restaurant.logo&.attached? ? url_for(@restaurant.logo) : nil }),
+             status: :ok
     else
       render json: @restaurant.errors, status: :unprocessable_entity
     end
@@ -45,19 +44,16 @@ class Api::RestaurantsController < ApplicationController
 
   private
 
-  def set_restaurant
-    @restaurant = Restaurant.find(params[:id])
-  rescue ActiveRecord::RecordNotFound
-    render json: { error: 'Restaurant not found' }, status: :not_found
+  # rubocop:disable Style/GuardClause, Style/IfUnlessModifier
+  def require_owner
+    @restaurant = current_user.restaurants.find_by(id: params[:restaurant_id])
+    unless @restaurant
+      render json: { error: 'Restaurant not found or you are not the owner' }, status: :not_found
+    end
   end
+  # rubocop:enable Style/GuardClause, Style/IfUnlessModifier
 
   def restaurant_params
     params.require(:restaurant).permit(:name, :description, :location, :category_id, :logo)
-  end
-
-  def require_owner
-    return if current_user.is_owner
-
-    render json: { error: 'You must be a restaurant owner to perform this action' }, status: :unauthorized
   end
 end

@@ -17,7 +17,7 @@ function DishesList() {
 
   useEffect(() => {
     axios
-      .get(`/api/restaurants/${restaurant_id}/dishes`) // now dynamic!
+      .get(`/api/restaurants/${restaurant_id}/dishes`)
       .then((res) => setDishes(res.data))
       .catch((err) => console.error(err));
   }, [restaurant_id]);
