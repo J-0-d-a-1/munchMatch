@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "../../../styles/dish.scss";
+import "../../../styles/menu.scss";
 
 function DishesList() {
   const { restaurant_id } = useParams(); // restaurant ID from the URL
@@ -45,7 +46,11 @@ function DishesList() {
       {restaurant && (
         <div className="restaurant-header">
           {restaurant.logo_url && (
-            <img src={restaurant.logo_url} alt={`${restaurant.name} logo`} />
+            <img
+              className="restaurant__logo"
+              src={restaurant.logo_url}
+              alt={`${restaurant.name} logo`}
+            />
           )}
           <h2>{restaurant.name}</h2>
           <h5>{restaurant.description}</h5>
