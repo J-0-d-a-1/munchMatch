@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import Button from "react-bootstrap/Button";
@@ -6,11 +6,13 @@ import axios from 'axios';
 
 function TopNavigation(props) {
   const navigate = useNavigate();
-  const {user, setUser} = props;
+  const { user, setUser } = props;
   // TODO: manage this through a context or state management solution
   const handleLogin = () => {
     navigate('/login');
   };
+
+  const handleSignup = () => navigate('/signup');
 
   const handleLogout = async () => {
     try {
@@ -25,7 +27,9 @@ function TopNavigation(props) {
   return (
     <Navbar className="bg-body-tertiary">
       <Container>
-        <Navbar.Brand>MunchMatch</Navbar.Brand>
+        <Navbar.Brand as={Link} to="/" className="cursor-pointer">
+          MunchMatch
+        </Navbar.Brand>
         <Navbar.Collapse className="justify-content-end">
           {user ? (
             <>
@@ -37,9 +41,14 @@ function TopNavigation(props) {
               </Button>
             </>
           ) : (
-            <Button variant="primary" onClick={handleLogin}>
-              Login
-            </Button>
+            <>
+              <Button variant="primary" onClick={handleLogin} className="me-2">
+                Login
+              </Button>
+              <Button variant="outline-success" onClick={handleSignup}>
+                Sign Up
+              </Button>
+            </>
           )}
         </Navbar.Collapse>
       </Container>
