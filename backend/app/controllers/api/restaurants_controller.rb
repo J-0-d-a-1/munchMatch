@@ -13,9 +13,9 @@ class Api::RestaurantsController < ApplicationController
   def show
     restaurant = Restaurant.find(params[:id])
 
-    render json: restaurant.as_json.merge({
-                                            logo_url: restaurant.logo.attached? ? url_for(restaurant.logo.variant(:thumb)) : nil
-                                          })
+    render json: restaurant.as_json(except: %i[created_at updated_at]).merge({
+                                                                               logo_url: restaurant.logo.attached? ? url_for(restaurant.logo) : nil
+                                                                             })
   end
 
   # POST /api/restaurants
