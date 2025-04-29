@@ -1,13 +1,15 @@
 class Api::DishesController < ApplicationController
   before_action :set_dish, only: %i[show update destroy]
   before_action :require_owner, only: %i[create update destroy] # restrict this actions to owners only
+  include Rails.application.routes.url_helpers
 
   # GET /api/restaurants/:restaurant_id/dishes
   # show dishes of a specific restaurant
   def index
-    @restaurant = Restaurant.find(params[:restaurant_id]) # Find the restaurant
-    @dishes = @restaurant.dishes # Get the dishes associated with that restaurant
-    render json: @dishes
+    restaurant = Restaurant.find(params[:restaurant_id])
+    dishes = restaurant.dishes
+
+    render json: dishes.map { |dish| dish_with_photo_url(dish) }
   end
 
   # GET /api/dishes
@@ -65,9 +67,7 @@ class Api::DishesController < ApplicationController
 
   def dish_with_photo_url(dish)
     dish_data = dish.as_json
-    if dish.photo.attached?
-      dish_data[:photo_url] = url_for(dish.photo) # Generate the URL for the attached image
-    end
+    dish_data[:photo_url] = url_for(dish.photo) if dish.photo.attached?
     dish_data
   end
 
