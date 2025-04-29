@@ -70,17 +70,19 @@ function NewRestaurantPage({ categories }) {
       await Promise.all(
         dishes.map(async (dish) => {
           const dishFormData = new FormData();
-          const priceInCents = Math.round(dish.price * 100);
 
           dishFormData.append("dish[name]", dish.name);
           dishFormData.append("dish[description]", dish.description);
-          dishFormData.append("dish[price]", priceInCents);
-          dishFormData.append("dish[restaurant_id]", restaurantId);
+          dishFormData.append("dish[price]", dish.price);
           dishFormData.append("dish[photo]", dish.photo);
 
-          await axios.post("/api/dishes", dishFormData, {
-            headers: { "Content-Type": "multipart/form-data" },
-          });
+          await axios.post(
+            `/api/restaurants/${restaurantId}/dishes`,
+            dishFormData,
+            {
+              headers: { "Content-Type": "multipart/form-data" },
+            }
+          );
         })
       );
 
@@ -128,7 +130,7 @@ function NewRestaurantPage({ categories }) {
     <div>
       <h1>Create your restaurant here!</h1>
       <Form noValidate validated={validated} onSubmit={handleSubmit}>
-        <Form.Group className="position-relative mb-3">
+        <Form.Group className="mb-3 text-start">
           <Form.Label>Logo</Form.Label>
           <Form.Control
             type="file"
@@ -140,7 +142,7 @@ function NewRestaurantPage({ categories }) {
             Please upload a logo.
           </Form.Control.Feedback>
         </Form.Group>
-        <Form.Group className="mb-3">
+        <Form.Group className="mb-3 text-start">
           <Form.Label>Restaurant&apos;s name</Form.Label>
           <Form.Control
             type="text"
@@ -152,7 +154,7 @@ function NewRestaurantPage({ categories }) {
             This field can&apos;t be empty.
           </Form.Control.Feedback>
         </Form.Group>
-        <Form.Group className="mb-3">
+        <Form.Group className="mb-3 text-start">
           <Form.Label>Description</Form.Label>
           <Form.Control
             as="textarea"
@@ -165,7 +167,7 @@ function NewRestaurantPage({ categories }) {
             This field can&apos;t be empty.
           </Form.Control.Feedback>
         </Form.Group>
-        <Form.Group className="mb-3">
+        <Form.Group className="mb-3 text-start">
           <Form.Label>Select a category</Form.Label>
           <Form.Select
             id="category"
@@ -180,10 +182,10 @@ function NewRestaurantPage({ categories }) {
             Please select a category.
           </Form.Control.Feedback>
         </Form.Group>
-        <Form.Group className="mb-3">
+        <Form.Group className="mb-3 text-start">
           <Form.Label>Location</Form.Label>
         </Form.Group>
-        <Row className="mb-3">
+        <Row className="mb-3 text-start">
           <Form.Group as={Col} md="6">
             <Form.Label>Address</Form.Label>
             <Form.Control
@@ -246,7 +248,7 @@ function NewRestaurantPage({ categories }) {
             </Form.Control.Feedback>
           </Form.Group>
         </Row>
-        <fieldset className="mb-3">
+        <fieldset className="mb-3 text-start">
           <legend>Create a dish</legend>
           {dishes.map((dish, index) => (
             <div key={index}>
@@ -262,7 +264,7 @@ function NewRestaurantPage({ categories }) {
                   Please upload a photo.
                 </Form.Control.Feedback>
               </Form.Group>
-              <Form.Group className="mb-3">
+              <Form.Group className="mb-3 text-start">
                 <Form.Label>Dish name</Form.Label>
                 <Form.Control
                   type="text"
@@ -274,7 +276,7 @@ function NewRestaurantPage({ categories }) {
                   This field can&apos;t be empty.
                 </Form.Control.Feedback>
               </Form.Group>
-              <Form.Group className="mb-3">
+              <Form.Group className="mb-3 text-start">
                 <Form.Label>Description</Form.Label>
                 <Form.Control
                   as="textarea"
@@ -288,7 +290,7 @@ function NewRestaurantPage({ categories }) {
                 </Form.Control.Feedback>
               </Form.Group>
               <Form.Label>Price</Form.Label>
-              <InputGroup className="mb-3">
+              <InputGroup className="mb-3 text-start">
                 <InputGroup.Text>$</InputGroup.Text>
                 <Form.Control
                   type="number"
@@ -305,6 +307,7 @@ function NewRestaurantPage({ categories }) {
                 type="button"
                 variant="danger"
                 onClick={() => handleDeleteDish(index)}
+                className="mb-3 text-end"
               >
                 Delete dish
               </Button>
