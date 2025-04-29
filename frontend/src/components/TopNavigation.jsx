@@ -3,12 +3,12 @@ import { useAuth } from "../contexts/AuthContext";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import Button from "react-bootstrap/Button";
-import axios from 'axios';
+import axios from "axios";
 
 function TopNavigation() {
   const navigate = useNavigate();
   const { user, setUser } = useAuth();
-  
+
   const handleLogin = () => {
     navigate('/login');
   };
