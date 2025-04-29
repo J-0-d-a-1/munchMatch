@@ -11,6 +11,7 @@ class Api::RestaurantsController < ApplicationController
 
   # GET /api/restaurants/:id
   def show
+    @restaurant = Restaurant.find(params[:id])
     render json: restaurant_with_logo_url(@restaurant)
   end
 
