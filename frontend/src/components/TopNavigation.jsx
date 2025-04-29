@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import Button from "react-bootstrap/Button";
@@ -27,7 +27,9 @@ function TopNavigation(props) {
   return (
     <Navbar className="bg-body-tertiary">
       <Container>
-        <Navbar.Brand>MunchMatch</Navbar.Brand>
+        <Navbar.Brand as={Link} to="/" className="cursor-pointer">
+          MunchMatch
+        </Navbar.Brand>
         <Navbar.Collapse className="justify-content-end">
           {user ? (
             <>
