@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import TinderCard from "react-tinder-card";
+import MatchedModal from "./MatchedModal";
 import { Card, Button } from "react-bootstrap";
 
 import "../Temp.css";
@@ -39,10 +40,18 @@ function MenuCard() {
 
   const [currentIndex, setCurrentIndex] = useState(dishCards.length - 1);
   const [lastDirection, setLastDirection] = useState();
-  const lastSwipeDirectionRef = useRef(null);
   const saveSwiped = JSON.parse(localStorage.getItem("swipeHistory")) || [];
   const [swipedHistory, setSwipedHistory] = useState(saveSwiped);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [matchedDish, setMatchedDish] = useState(null);
+
+  const lastSwipeDirectionRef = useRef(null);
   const currentIndexRef = useRef(currentIndex);
+
+  // close modal handling
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
   // initializing stored history from localstrage
   useEffect(() => {
@@ -68,69 +77,77 @@ function MenuCard() {
 
   const canSwipe = currentIndex >= 0;
 
-  // set last direction
-  const swiped = (direction) => {
-    setLastDirection(direction);
-    lastSwipeDirectionRef.current = direction;
-  };
-
   // handle the case in which go back is pressed before card goes outOfFrame
-  const outOfFrame = (name, index) => {
+  const outOfFrame = (name, index, direction) => {
     if (currentIndexRef.current >= index) {
       childRefs[index].current.restoreCard();
       updateCurrentIndex(index - 1);
+
+      // Modal handle
+      if (direction === "right") {
+        // capture the matched dish
+        setMatchedDish(dishCards[index]);
+        setIsModalOpen(true);
+      }
     }
   };
 
-  const handleSwipe = async (direction) => {
-    if (canSwipe && currentIndex < dishCards.length) {
+  const handleSwipe = async (direction, triggerByButton = false) => {
+    if (!canSwipe || currentIndex >= dishCards.length) return;
+
+    if (triggerByButton) {
       // Trigger swipe action/animation
       await childRefs[currentIndex].current.swipe(direction);
-
-      // Capture the current dish id
-      const currentDishId = dishCards[currentIndex].id;
-
-      // Update swipe history and state
-      setSwipedHistory((prev) => {
-        const exisitingSwipe = prev.find(
-          (entry) => entry.dish_id === currentDishId
-        );
-
-        let updatedHistory;
-        if (exisitingSwipe) {
-          // increment the appropriate swipe count
-          updatedHistory = prev.map((entry) =>
-            entry.dish_id === currentDishId
-              ? {
-                  ...entry,
-                  right_swipes:
-                    direction === "right"
-                      ? exisitingSwipe.right_swipes + 1
-                      : exisitingSwipe.right_swipes,
-                  left_swipes:
-                    direction === "left"
-                      ? exisitingSwipe.left_swipes + 1
-                      : exisitingSwipe.left_swipes,
-                }
-              : entry
-          );
-        } else {
-          updatedHistory = [
-            ...prev,
-            {
-              dish_id: currentDishId,
-              right_swipes: direction === "right" ? 1 : 0,
-              left_swipes: direction === "left" ? 1 : 0,
-            },
-          ];
-        }
-
-        // storing swipeHistory in local sotrage
-        localStorage.setItem("swipeHistory", JSON.stringify(updatedHistory));
-
-        return updatedHistory;
-      });
+      return;
     }
+
+    // setting the last direction
+    setLastDirection(direction);
+    lastSwipeDirectionRef.current = direction;
+
+    // Capture the current dish id
+    const currentDishId = dishCards[currentIndex].id;
+
+    // Update swipe history and state
+    setSwipedHistory((prev) => {
+      const exisitingSwipe = prev.find(
+        (entry) => entry.dish_id === currentDishId
+      );
+
+      let updatedHistory;
+      if (exisitingSwipe) {
+        // increment the appropriate swipe count
+        updatedHistory = prev.map((entry) =>
+          entry.dish_id === currentDishId
+            ? {
+                ...entry,
+                right_swipes:
+                  direction === "right"
+                    ? exisitingSwipe.right_swipes + 1
+                    : exisitingSwipe.right_swipes,
+                left_swipes:
+                  direction === "left"
+                    ? exisitingSwipe.left_swipes + 1
+                    : exisitingSwipe.left_swipes,
+              }
+            : entry
+        );
+      } else {
+        updatedHistory = [
+          ...prev,
+          {
+            dish_id: currentDishId,
+            right_swipes: direction === "right" ? 1 : 0,
+            left_swipes: direction === "left" ? 1 : 0,
+          },
+        ];
+      }
+
+      // storing swipeHistory in local sotrage
+      localStorage.setItem("swipeHistory", JSON.stringify(updatedHistory));
+
+      return updatedHistory;
+    });
   };
 
   // undo swipe
@@ -160,6 +177,9 @@ function MenuCard() {
 
   return (
     <div>
+      {isModalOpen && (
+        <MatchedModal handleCloseModal={handleCloseModal} dish={matchedDish} />
+      )}
       <h1>What are you munching today?</h1>
       <div className="card-container">
         {dishCards.map(
@@ -170,8 +190,10 @@ function MenuCard() {
                 ref={childRefs[index]}
                 className="swipe"
                 preventSwipe={["up", "down"]}
-                onSwipe={(direction) => swiped(direction)}
-                onCardLeftScreen={() => outOfFrame(dish.name, index)}
+                onSwipe={(direction) => handleSwipe(direction)}
+                onCardLeftScreen={(direction) =>
+                  outOfFrame(dish.name, index, direction)
+                }
               >
                 <Card
                   style={{
@@ -190,13 +212,13 @@ function MenuCard() {
             )
         )}
         <div className="btn-container">
-          <Button variant="danger" onClick={() => handleSwipe("left")}>
+          <Button variant="danger" onClick={() => handleSwipe("left", true)}>
             Nah!
           </Button>
           <Button variant="warning" onClick={() => handleUndoSwipe()}>
             Undo Swipe
           </Button>
-          <Button variant="success" onClick={() => handleSwipe("right")}>
+          <Button variant="success" onClick={() => handleSwipe("right", true)}>
             Yum!
           </Button>
         </div>
