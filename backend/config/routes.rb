@@ -8,8 +8,9 @@ Rails.application.routes.draw do
       end
     end
     resources :categories, only: %i[index show]
-    resources :restaurants
-    resources :dishes
+    resources :restaurants do
+      resources :dishes, only: %i[create index]
+    end
     resources :favorites, only: %i[index create]
     delete '/favorites/:restaurant_id', to: 'favorites#destroy'
     resources :swipes, only: %i[index create]

@@ -1,12 +1,12 @@
 class Api::RestaurantsController < ApplicationController
   before_action :set_restaurant, only: %i[show update destroy]
-  before_action :authenticate_user!, only: %i[create update destroy] # make sure user is logged in
+  # before_action :authenticate_with, only: %i[create update destroy] # make sure user is logged in
   before_action :require_owner, only: %i[create update destroy] # restrict this actions to owners only
 
   # GET /api/restaurants
   def index
     @restaurants = current_user.restaurants
-    render json: @restaurants, except: [:created_at, :updated_at]
+    render json: @restaurants, except: %i[created_at updated_at]
   end
 
   # GET /api/restaurants/:id
@@ -52,7 +52,8 @@ class Api::RestaurantsController < ApplicationController
   end
 
   def require_owner
-    render json: { error: 'You must be a restaurant owner to perform this action' }, status: :unauthorized 
-    unless current_user.is_owner
+    return if current_user.is_owner
+
+    render json: { error: 'You must be a restaurant owner to perform this action' }, status: :unauthorized
   end
 end
