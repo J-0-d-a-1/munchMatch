@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
@@ -13,6 +13,7 @@ function SignupPage() {
     is_owner: false
   });
   const [errors, setErrors] = useState([]);
+  const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,13 +29,26 @@ function SignupPage() {
       );
 
       if (response.status === 201) {
-        navigate('/login');
+        setSuccess(true);
+        setErrors([]);
       }
     } catch (err) {
       console.error('Signup error:', err.response?.data);
       setErrors(err.response?.data?.errors || ['An error occurred during signup']);
     }
   };
+
+  // Auto-redirect after successful signup
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        navigate('/login');
+      }, 5000); // 5 seconds delay
+
+      // Clear timer if user leaves early
+      return () => clearTimeout(timer);
+    }
+  }, [success, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -59,6 +73,17 @@ function SignupPage() {
                     <li key={index}>{error}</li>
                   ))}
                 </ul>
+              </Alert>
+            )}
+
+            {/* Show success and redirect message if signup was successful */}
+            {success && (
+              <Alert variant="success" className="text-center">
+                <Alert.Heading>Signup Successful!</Alert.Heading>
+                <p>You will be redirected to the login page shortly...</p>
+                <p>
+                  Or <Link to="/login">click here</Link> if you are not redirected automatically.
+                </p>
               </Alert>
             )}
 
