@@ -1,36 +1,27 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
+import { useAuth } from '../../contexts/AuthContext';
 
 
-function LoginPage(props) {
+function LoginPage() {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
+  const { setUser } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [error, setError] = useState('');
-  const { user, setUser } = props;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post('/api/sessions', formData, { withCredentials: true });
       // Handle successful login (e.g., redirect or update auth state)
-      // console.log('Login successful:', response.data);
-      setUser(prevUser => ({
-        ...prevUser,
-        id: response.data.id,
-        name: response.data.name,
-        is_owner: response.data.is_owner
-      }));
-      // Redirect based on user type
-      if (response.data.is_owner) {
-        navigate('/user/restaurants');
-      } else {
-        navigate('/user');
-      }
+      setUser(response.data);
+      navigate(location.state?.from || '/');
     } catch (err) {
       setError(err.response?.data?.errors || 'An error occurred during login');
     }
