@@ -6,11 +6,13 @@ import axios from 'axios';
 
 function TopNavigation(props) {
   const navigate = useNavigate();
-  const {user, setUser} = props;
+  const { user, setUser } = props;
   // TODO: manage this through a context or state management solution
   const handleLogin = () => {
     navigate('/login');
   };
+
+  const handleSignup = () => navigate('/signup');
 
   const handleLogout = async () => {
     try {
@@ -37,9 +39,14 @@ function TopNavigation(props) {
               </Button>
             </>
           ) : (
-            <Button variant="primary" onClick={handleLogin}>
-              Login
-            </Button>
+            <>
+              <Button variant="primary" onClick={handleLogin} className="me-2">
+                Login
+              </Button>
+              <Button variant="outline-success" onClick={handleSignup}>
+                Sign Up
+              </Button>
+            </>
           )}
         </Navbar.Collapse>
       </Container>
