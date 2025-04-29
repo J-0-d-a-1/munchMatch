@@ -1,17 +1,18 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import "../../../styles/dish.scss";
 
 function DishesList() {
-  const { id } = useParams(); // restaurant ID from the URL
+  const { restaurant_id } = useParams(); // restaurant ID from the URL
   const [dishes, setDishes] = useState([]);
 
   useEffect(() => {
     axios
-      .get(`/api/restaurants/7/dishes`) // now dynamic!
+      .get(`/api/restaurants/${restaurant_id}/dishes`) // now dynamic!
       .then((res) => setDishes(res.data))
       .catch((err) => console.error(err));
-  }, [id]);
+  }, [restaurant_id]);
 
   // Format price
   const formatPrice = (priceInCents) => {
@@ -20,11 +21,15 @@ function DishesList() {
 
   // Map dishes
   const parsedDishes = dishes.map((dish) => (
-    <div key={dish.id}>
+    <div key={dish.id} className="dish-list__item">
       <h2>{dish.name}</h2>
-      <img src={dish.photo_url} alt={dish.name} />
-      <p>{dish.description}</p>
-      <p>{formatPrice(dish.price_in_cents)}</p>
+      <img className="dish-list__image" src={dish.photo_url} alt={dish.name} />
+      <div className="dish__dedescription">
+        <p>{dish.description}</p>
+        <div className="photo-list__dish-price">
+          <p>{formatPrice(dish.price_in_cents)}</p>
+        </div>
+      </div>
     </div>
   ));
 
