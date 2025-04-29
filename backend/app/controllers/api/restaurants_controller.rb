@@ -1,26 +1,24 @@
 class Api::RestaurantsController < ApplicationController
-  before_action :set_restaurant, only: %i[show update destroy]
-  before_action :require_owner, only: %i[create update destroy] # restrict this actions to owners only
+  before_action :set_restaurant, only: %i[update destroy]
+  before_action :require_owner, only: %i[show index create update destroy] # restrict this actions to owners only
   include Rails.application.routes.url_helpers
 
   # GET /api/restaurants
   def index
     @restaurants = current_user.restaurants
-    render json: @restaurants.as_json(except: %i[created_at updated_at])
+    render json: @restaurants.map { |restaurant| restaurant_with_logo_url(restaurant) }
   end
 
   # GET /api/restaurants/:id
   def show
-    render json: @restaurant.as_json(except: %i[created_at updated_at]).merge({
-                                                                                logo_url: @restaurant.logo&.attached? ? url_for(@restaurant.logo) : nil
-                                                                              })
+    render json: restaurant_with_logo_url(@restaurant)
   end
 
   # POST /api/restaurants
   def create
     @restaurant = current_user.restaurants.new(restaurant_params)
     if @restaurant.save
-      render json: @restaurant.as_json(except: %i[created_at updated_at]).merge({ logo_url: @restaurant.logo&.attached? ? url_for(@restaurant.logo) : nil }),
+      render json: restaurant_with_logo_url(@restaurant),
              status: :created
     else
       render json: { errors: @restaurant.errors.full_messages }, status: :unprocessable_entity
@@ -30,7 +28,7 @@ class Api::RestaurantsController < ApplicationController
   # PATCH/PUT /api/restaurants/:id
   def update
     if @restaurant.update(restaurant_params)
-      render json: @restaurant.as_json(except: %i[created_at updated_at]).merge({ logo_url: @restaurant.logo&.attached? ? url_for(@restaurant.logo) : nil }),
+      render json: restaurant_with_logo_url(@restaurant),
              status: :ok
     else
       render json: @restaurant.errors, status: :unprocessable_entity
@@ -53,6 +51,12 @@ class Api::RestaurantsController < ApplicationController
 
   def restaurant_params
     params.require(:restaurant).permit(:name, :description, :location, :category_id, :logo)
+  end
+
+  def restaurant_with_logo_url(restaurant)
+    restaurant_data = restaurant.as_json
+    restaurant_data[:logo_url] = url_for(restaurant.logo) if restaurant.logo.attached?
+    restaurant_data
   end
 
   def require_owner
