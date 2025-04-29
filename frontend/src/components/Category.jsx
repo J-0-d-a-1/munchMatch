@@ -1,25 +1,10 @@
-const category = [
-  {
-    name: "Mexican",
-  },
-  {
-    name: "Japanese",
-  },
-  {
-    name: "Indian",
-  },
-  {
-    name: "Confort",
-  },
-];
-
-function Category() {
+function Category({ categories }) {
   return (
     <div>
-      {category.map((item) => {
+      {categories.map((category) => {
         return (
-          <a key={item.name} style={{ display: "inline-block" }}>
-            <div>{item.name}</div>
+          <a key={category.name} style={{ display: "inline-block" }}>
+            <div>{category.name}</div>
           </a>
         );
       })}

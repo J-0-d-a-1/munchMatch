@@ -5,5 +5,5 @@ class Dish < ApplicationRecord
   validates :name, presence: true
   validates :description, presence: true
   validates :price_in_cents, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
-  validates :photo, presence: true, blob: { content_type: ['image/png', 'image/jpg', 'image/jpeg'] }
+  validates :photo, presence: true
 end

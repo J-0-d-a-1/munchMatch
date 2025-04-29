@@ -18,17 +18,18 @@ import FavoritesPage from "./pages/user/FavoritesPage";
 // Page components for restaurant owners
 import OwnerPage from "./pages/owner/OwnerPage";
 import RestaurantPage from "./pages/owner/RestaurantPage";
-import DishesPage from "./pages/owner/DishesPage";
 import DishPage from "./pages/owner/DishPage";
-import EditDishPage from "./pages/owner/EditDishPage";
-import AddDishPage from "./pages/owner/AddDishPage";
+import NewRestaurantPage from "./pages/owner/NewRestaurantPage";
+import EditRestaurantPage from "./pages/owner/EditRestaurantPage";
 
 function App() {
+  const [categories, setCategories] = useState([]);
+
   useEffect(() => {
     axios
-      .get("http://localhost:3000/api/restaurants")
-      .then((res) => console.log("✅ Data from backend:", res.data))
-      .catch((err) => console.error("❌ Backend connection failed:", err));
+      .get("http://localhost:3000/api/categories")
+      .then((res) => setCategories(res.data))
+      .catch((err) => console.error(err));
   }, []);
 
   // Save current user login info
@@ -37,12 +38,14 @@ function App() {
   useEffect(() => {
     const checkSession = async () => {
       try {
-        const response = await axios.get('/api/sessions/current', { withCredentials: true });
+        const response = await axios.get("/api/sessions/current", {
+          withCredentials: true,
+        });
         if (response.data.user) {
           setUser(response.data.user);
         }
       } catch (err) {
-        console.error('Session check failed:', err);
+        console.error("Session check failed:", err);
       }
     };
     checkSession();
@@ -53,9 +56,7 @@ function App() {
       <Router>
         <div className="App">
           <TopNavigation user={user} setUser={setUser} />
-          <Category />
-          <h1>MunchMatch</h1>
-          <p>Testing backend connection in console...</p>
+          <Category categories={categories} />
         </div>
         <Routes>
           {/* Common routes */}
@@ -78,21 +79,20 @@ function App() {
             path="/user/restaurants/:restaurant_id"
             element={<RestaurantPage />}
           />
-          <Route
-            path="/user/restaurants/:restaurant_id/dishes"
-            element={<DishesPage />}
-          />
+
           <Route
             path="/user/restaurants/:restaurant_id/dishes/:dish_id"
             element={<DishPage />}
           />
+
           <Route
-            path="/user/restaurants/:restaurant_id/dishes/:dish_id/edit"
-            element={<EditDishPage />}
+            path="/user/restaurants/new"
+            element={<NewRestaurantPage categories={categories} />}
           />
+
           <Route
-            path="/user/restaurants/:restaurant_id/dishes/new"
-            element={<AddDishPage />}
+            path="/user/restaurants/:restaurant_id/edit"
+            element={<EditRestaurantPage />}
           />
         </Routes>
       </Router>
