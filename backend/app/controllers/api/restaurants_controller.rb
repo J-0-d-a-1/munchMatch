@@ -1,7 +1,7 @@
 class Api::RestaurantsController < ApplicationController
   before_action :set_restaurant, only: %i[show update destroy]
-  # before_action :authenticate_with, only: %i[create update destroy] # make sure user is logged in
   before_action :require_owner, only: %i[create update destroy] # restrict this actions to owners only
+  include Rails.application.routes.url_helpers
 
   # GET /api/restaurants
   def index
@@ -11,7 +11,11 @@ class Api::RestaurantsController < ApplicationController
 
   # GET /api/restaurants/:id
   def show
-    render json: @restaurant
+    restaurant = Restaurant.find(params[:id])
+
+    render json: restaurant.as_json.merge({
+                                            logo_url: restaurant.logo.attached? ? url_for(restaurant.logo.variant(:thumb)) : nil
+                                          })
   end
 
   # POST /api/restaurants

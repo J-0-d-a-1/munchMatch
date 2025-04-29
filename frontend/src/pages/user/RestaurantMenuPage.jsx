@@ -6,6 +6,13 @@ import "../../../styles/dish.scss";
 function DishesList() {
   const { restaurant_id } = useParams(); // restaurant ID from the URL
   const [dishes, setDishes] = useState([]);
+  const [restaurant, setRestaurant] = useState();
+
+  useEffect(() => {
+    axios.get(`/api/restaurants/${restaurant_id}`).then((res) => {
+      setRestaurant(res.data);
+    });
+  }, []);
 
   useEffect(() => {
     axios
@@ -33,7 +40,21 @@ function DishesList() {
     </div>
   ));
 
-  return <div>{parsedDishes}</div>;
+  return (
+    <>
+      {restaurant && (
+        <div className="restaurant-header">
+          {restaurant.logo_url && (
+            <img src={restaurant.logo_url} alt={`${restaurant.name} logo`} />
+          )}
+          <h2>{restaurant.name}</h2>
+          <h5>{restaurant.description}</h5>
+        </div>
+      )}
+
+      <div>{parsedDishes}</div>
+    </>
+  );
 }
 
 export default DishesList;
