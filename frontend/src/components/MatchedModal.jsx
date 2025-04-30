@@ -39,6 +39,7 @@ function MatchedModal(props) {
             style={{ width: "100%", height: "50vh" }}
           />
           <Modal.Title>{dish.name}</Modal.Title>
+          <p>{dish.description}</p>
           {restaurant ? (
             <p>
               from <span>{restaurant.name}</span>
