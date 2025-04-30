@@ -319,7 +319,7 @@ function NewRestaurantPage({ categories }) {
             Add dish
           </Button>
         </fieldset>
-        <Button type="submit">Create Restaurant!</Button>
+        <Button type="submit">Create</Button>
         <Button onClick={handleCancel} variant="secondary">
           Cancel
         </Button>
