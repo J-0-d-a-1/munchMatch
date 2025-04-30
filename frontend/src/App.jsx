@@ -97,7 +97,7 @@ function App() {
             path="/user/restaurants"
             element={
               <OwnerRoute>
-                <OwnerDashboard />
+                <OwnerDashboard categories={categories} />
               </OwnerRoute>
             }
           />

@@ -1,10 +1,23 @@
 import { useState } from "react";
 import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
-import { Modal, Button } from "react-bootstrap";
-import DeleteConfirmationModal from "./ConfirmationModal";
+import DeleteConfirmationModal from "./DeleteConfirmationModal";
+import EditRestaurantModal from "./EditrestaurantModal";
+import "../../styles/dashboard.scss";
 
-const RestaurantList = ({ restaurants, onDelete }) => {
+const RestaurantList = ({
+  categories,
+  restaurants,
+  onDelete,
+  onEditClick,
+  showEditModal,
+  onHideEditModal,
+  editingRestaurant,
+  onUpdateRestaurant,
+  onUpdateDish,
+  onAddDish,
+  onDeleteDish,
+}) => {
   const [showModal, setShowModal] = useState(false);
   const [restaurantToDelete, setRestaurantToDelete] = useState(null);
 
@@ -16,34 +29,43 @@ const RestaurantList = ({ restaurants, onDelete }) => {
     }
   };
 
-  const parsedRestaurants = restaurants.map((restaurant) => (
-    <>
-      <tr key={restaurant.id}>
-        <td>{restaurant.name}</td>
-        <td>
-          <FaEdit />
-        </td>
-        <td>
-          <MdDelete
-            onClick={() => {
-              setRestaurantToDelete(restaurant);
-              setShowModal(true);
-            }}
-          />
-        </td>
-      </tr>
-    </>
-  ));
-
   return (
     <>
-      {parsedRestaurants}
+      {restaurants.map((restaurant) => (
+        <tr key={restaurant.id}>
+          <td>{restaurant.name}</td>
+          <td>
+            <FaEdit className="icon" onClick={() => onEditClick(restaurant)} />
+          </td>
+          <td>
+            <MdDelete
+              className="icon"
+              onClick={() => {
+                setRestaurantToDelete(restaurant);
+                setShowModal(true);
+              }}
+            />
+          </td>
+        </tr>
+      ))}
       <DeleteConfirmationModal
         show={showModal}
         onHide={() => setShowModal(false)}
         onConfirm={handleConfirmDelete}
         restaurantName={restaurantToDelete?.name || ""}
       />
+      {editingRestaurant && (
+        <EditRestaurantModal
+          categories={categories}
+          show={showEditModal}
+          onHide={onHideEditModal}
+          restaurant={editingRestaurant}
+          onUpdateRestaurant={onUpdateRestaurant}
+          onUpdateDish={onUpdateDish}
+          onAddDish={onAddDish}
+          onDeleteDish={onDeleteDish}
+        />
+      )}
     </>
   );
 };

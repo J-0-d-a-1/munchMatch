@@ -320,7 +320,7 @@ function NewRestaurantPage({ categories }) {
           </Button>
         </fieldset>
         <Button type="submit">Create Restaurant!</Button>
-        <Button onClick={handleCancel} variant="danger">
+        <Button onClick={handleCancel} variant="secondary">
           Cancel
         </Button>
       </Form>
