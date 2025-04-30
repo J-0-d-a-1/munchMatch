@@ -27,7 +27,7 @@ function App() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/api/categories")
+      .get("/api/categories")
       .then((res) => setCategories(res.data))
       .catch((err) => console.error(err));
   }, []);
