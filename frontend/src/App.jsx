@@ -7,6 +7,14 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 
+// Authorization components
+import { AuthProvider } from "./contexts/AuthContext";
+import {
+  OwnerRoute,
+  PrivateRoute,
+  PublicOnlyRoute,
+} from "./components/authorization/ProtectedRoutes";
+
 // Page components for regular users
 import HomePage from "./pages/user/HomePage";
 import LoginPage from "./pages/user/LoginPage";
@@ -32,72 +40,103 @@ function App() {
       .catch((err) => console.error(err));
   }, []);
 
-  // Save current user login info
-  const [user, setUser] = useState(null);
-  // Check session when app loads
-  useEffect(() => {
-    const checkSession = async () => {
-      try {
-        const response = await axios.get("/api/sessions/current", {
-          withCredentials: true,
-        });
-        if (response.data.user) {
-          setUser(response.data.user);
-        }
-      } catch (err) {
-        console.error("Session check failed:", err);
-      }
-    };
-    checkSession();
-  }, []);
-
   return (
-    <>
+    <AuthProvider>
       <Router>
         <div className="App">
-          <TopNavigation user={user} setUser={setUser} />
+          <TopNavigation />
           <Category categories={categories} />
         </div>
         <Routes>
-          {/* Common routes */}
+          {/* Public routes */}
           <Route path="/" element={<HomePage />} />
-          <Route
-            path="/login"
-            element={<LoginPage user={user} setUser={setUser} />}
-          />
-          <Route path="/signup" element={<SignupPage />} />
-          <Route path="/user" element={<UserPage />} />
           <Route
             path="/restaurants/:restaurant_id"
             element={<RestaurantMenuPage />}
           />
-          <Route path="/favorites" element={<FavoritesPage />} />
+
+          {/* Auth routes - only accessible when NOT logged in */}
+          <Route
+            path="/login"
+            element={
+              <PublicOnlyRoute>
+                <LoginPage />
+              </PublicOnlyRoute>
+            }
+          />
+          <Route
+            path="/signup"
+            element={
+              <PublicOnlyRoute>
+                <SignupPage />
+              </PublicOnlyRoute>
+            }
+          />
+
+          {/* Protected routes - require login */}
+          <Route
+            path="/user"
+            element={
+              <PrivateRoute>
+                <UserPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/favorites"
+            element={
+              <PrivateRoute>
+                <FavoritesPage />
+              </PrivateRoute>
+            }
+          />
 
           {/* Owner-only routes */}
-          <Route path="/user/restaurants" element={<OwnerDashboard />} />
+
+          <Route
+            path="/user/restaurants"
+            element={
+              <OwnerRoute>
+                <OwnerDashboard />
+              </OwnerRoute>
+            }
+          />
           <Route
             path="/user/restaurants/:restaurant_id"
-            element={<RestaurantPage />}
+            element={
+              <OwnerRoute>
+                <RestaurantPage />
+              </OwnerRoute>
+            }
           />
-
           <Route
             path="/user/restaurants/:restaurant_id/dishes/:dish_id"
-            element={<DishPage />}
+            element={
+              <OwnerRoute>
+                <DishPage />
+              </OwnerRoute>
+            }
           />
-
           <Route
             path="/user/restaurants/new"
-            element={<NewRestaurantPage categories={categories} />}
+            element={
+              <OwnerRoute>
+                <NewRestaurantPage categories={categories} />
+              </OwnerRoute>
+            }
           />
-
           <Route
             path="/user/restaurants/:restaurant_id/edit"
-            element={<EditRestaurantPage />}
+            element={
+              <OwnerRoute>
+                <EditRestaurantPage />
+              </OwnerRoute>
+            }
           />
         </Routes>
       </Router>
       {/* <Footer /> */}
-    </>
+    </AuthProvider>
   );
 }
 

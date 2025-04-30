@@ -1,19 +1,18 @@
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import Button from "react-bootstrap/Button";
-import axios from 'axios';
+import axios from "axios";
 
-function TopNavigation(props) {
+function TopNavigation() {
   const navigate = useNavigate();
-  const { user, setUser } = props;
-  // TODO: manage this through a context or state management solution
+  const { user, setUser } = useAuth();
+
   const handleLogin = () => {
     navigate('/login');
   };
-
   const handleSignup = () => navigate('/signup');
-
   const handleLogout = async () => {
     try {
       await axios.delete(`/api/sessions/${user.id}`, { withCredentials: true });
