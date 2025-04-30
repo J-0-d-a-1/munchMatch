@@ -126,6 +126,8 @@ function NewRestaurantPage({ categories }) {
     setDishes((prevDishes) => prevDishes.filter((_, i) => i !== index));
   };
 
+  const handleCancel = () => navigate("/user/restaurants");
+
   return (
     <div>
       <h1>Create your restaurant here!</h1>
@@ -318,6 +320,9 @@ function NewRestaurantPage({ categories }) {
           </Button>
         </fieldset>
         <Button type="submit">Create Restaurant!</Button>
+        <Button onClick={handleCancel} variant="danger">
+          Cancel
+        </Button>
       </Form>
     </div>
   );

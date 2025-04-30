@@ -1,35 +1,32 @@
 class Api::DishesController < ApplicationController
-  before_action :set_dish, only: %i[show update destroy]
+  before_action :set_restaurant, only: %i[index create]
   before_action :require_owner, only: %i[create update destroy] # restrict this actions to owners only
+  before_action :set_dish, only: %i[show update destroy]
   include Rails.application.routes.url_helpers
 
   # GET /api/restaurants/:restaurant_id/dishes
   # show dishes of a specific restaurant
   def index
-    restaurant = Restaurant.find(params[:restaurant_id])
-    dishes = restaurant.dishes
-
+    dishes = @restaurant.dishes
     render json: dishes.map { |dish| dish_with_photo_url(dish) }
   end
 
   # GET /api/dishes
   # Show all dishes from all restaurants
   def all
-    @dishes = Dish.all
-    render json: @dishes
+    @dishes = Dish.all.with_attached_photo
+    render json: @dishes.map { |dish| dish_with_photo_url(dish) }
   end
 
   # GET /api/dishes/:id
   # Show one dish by its id
   def show
-    @dish = Dish.find(params[:id])
-    render json: @dish
+    render json: dish_with_photo_url(@dish)
   end
 
   # POST /api/restaurants/${restaurantId}/dishes
   def create
-    @restaurant = current_user.restaurants.find(params[:restaurant_id])
-    @dish = @restaurant.dishes.new(dish_params.except(:price_in_cents)) # Make sure price_in_cents isn't in permitted params
+    @dish = @restaurant.dishes.new(dish_params.except(:price_in_cents)) # hold price to format it first
 
     @dish.price_in_cents = (params[:dish][:price].to_f * 100).to_i if params[:dish][:price].present?
 
@@ -43,7 +40,7 @@ class Api::DishesController < ApplicationController
   # PATCH/PUT /api/dishes/:id
   def update
     if @dish.update(dish_params)
-      render json: @dish, status: :ok
+      render json: dish_with_photo_url(@dish), status: :ok
     else
       render json: @dish.errors, status: :unprocessable_entity
     end
@@ -57,6 +54,18 @@ class Api::DishesController < ApplicationController
 
   private
 
+  def set_restaurant
+    @restaurant = Restaurant.find_by(id: params[:restaurant_id])
+  end
+
+  # rubocop:disable Style/GuardClause
+  def require_owner
+    unless current_user && @restaurant && @restaurant.user_id == current_user.id
+      render json: { error: 'Restaurant not found or you are not the owner' }, status: :not_found
+    end
+  end
+  # rubocop:enable Style/GuardClause
+
   def set_dish
     @dish = Dish.find(params[:id])
   end
@@ -69,11 +78,5 @@ class Api::DishesController < ApplicationController
     dish_data = dish.as_json
     dish_data[:photo_url] = url_for(dish.photo) if dish.photo.attached?
     dish_data
-  end
-
-  def require_owner
-    return if current_user.is_owner
-
-    render json: { error: 'You must be a restaurant owner to perform this action' }, status: :unauthorized
   end
 end

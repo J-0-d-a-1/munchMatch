@@ -24,7 +24,7 @@ import RestaurantMenuPage from "./pages/user/RestaurantMenuPage";
 import FavoritesPage from "./pages/user/FavoritesPage";
 
 // Page components for restaurant owners
-import OwnerPage from "./pages/owner/OwnerPage";
+import OwnerDashboard from "./pages/owner/OwnerDashboard";
 import RestaurantPage from "./pages/owner/RestaurantPage";
 import DishPage from "./pages/owner/DishPage";
 import NewRestaurantPage from "./pages/owner/NewRestaurantPage";
@@ -35,7 +35,7 @@ function App() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/api/categories")
+      .get("/api/categories")
       .then((res) => setCategories(res.data))
       .catch((err) => console.error(err));
   }, []);
@@ -92,11 +92,12 @@ function App() {
           />
 
           {/* Owner-only routes */}
+
           <Route
             path="/user/restaurants"
             element={
               <OwnerRoute>
-                <OwnerPage />
+                <OwnerDashboard />
               </OwnerRoute>
             }
           />
