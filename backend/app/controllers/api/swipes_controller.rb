@@ -17,7 +17,13 @@ class Api::SwipesController < ApplicationController
   def create
     return render json: { error: 'Unauthorized: User must be logged in to swipe' }, status: :unauthorized unless @user
 
+    Rails.logger.debug "Incoming swipe params: #{params.inspect}"
+
     @swipe = Swipe.find_or_initialize_by(user: @user, dish: @dish)
+
+    # set up swipes to 0 before increment
+    @swipe.right_swipes ||= 0
+    @swipe.left_swipes ||= 0
 
     # transfer swipes history if exist
     @swipe.right_swipes += params[:right_swipes].to_i
@@ -53,8 +59,11 @@ class Api::SwipesController < ApplicationController
   private
 
   def set_dish
-    @dish = Dish.find(params[:dish_id])
-    render json: { error: 'Dish not found' }, status: :not_found unless @dish
+    @dish = Dish.find_by(id: params[:dish_id])
+
+    return if @dish
+
+    render json: { error: 'Dish not found' }, status: :not_found
   end
 
   def set_user

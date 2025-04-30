@@ -7,37 +7,9 @@ import axios from "axios";
 
 import "../Temp.css";
 
-// const data = [
-//   {
-//     id: 1,
-//     name: "Sushi",
-//     description: "Japanese Traditional food",
-//     restaurant_id: 1,
-//     prince_in_cent: 2000,
-//     photo_url: "../../../mock_image/japanese.png",
-//     category_id: 1,
-//   },
-//   {
-//     id: 2,
-//     name: "Curry",
-//     description: "Indian Traditional food",
-//     restaurant_id: 2,
-//     prince_in_cent: 2000,
-//     photo_url: "../../../mock_image/indian.png",
-//     category_id: 2,
-//   },
-//   {
-//     id: 3,
-//     name: "Tacos",
-//     description: "Mexican Traditional food",
-//     restaurant_id: 3,
-//     prince_in_cent: 2000,
-//     photo_url: "../../../mock_image/mexican.png",
-//     category_id: 3,
-//   },
-// ];
-
 function MenuCard() {
+  const [currentUser, setCurrentUser] = useState(null);
+
   const [dishCards, setDishCards] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(null);
   const [lastDirection, setLastDirection] = useState();
@@ -54,12 +26,62 @@ function MenuCard() {
     setIsModalOpen(false);
   };
 
+  // get current user
+  useEffect(() => {
+    axios
+      .get("api/sessions/current")
+      .then((res) => {
+        setCurrentUser(res.data);
+      })
+      .catch((err) => console.error(err));
+  }, []);
+
+  // connecting localstorage to database
+  const syncSwipeHistoryToDB = async () => {
+    // get history from localstrage
+    const localSwipeHistories = JSON.parse(
+      localStorage.getItem("swipeHistory")
+    );
+
+    if (!localSwipeHistories || localSwipeHistories.length === 0) return;
+
+    try {
+      for (const history of localSwipeHistories) {
+        const { dish_id, right_swipes, left_swipes } = history;
+
+        // send POST to backend each item
+        await axios.post(
+          "/api/swipes",
+          {
+            dish_id,
+            right_swipes,
+            left_swipes,
+          },
+          {
+            withCredentials: true,
+          }
+        );
+      }
+
+      // clear localstrage
+      localStorage.removeItem("swipeHistory");
+    } catch (error) {
+      console.error("Error syncing swipe history:", error);
+    }
+  };
+
+  // excute fetching localstrage history
+  useEffect(() => {
+    if (currentUser && localStorage.getItem("swipeHistory")) {
+      syncSwipeHistoryToDB();
+    }
+  }, [currentUser]);
+
   // get the dishes
   useEffect(() => {
     axios
       .get("/api/dishes")
       .then((res) => {
-        console.log(res.data);
         setDishCards(res.data);
       })
       .catch((err) => console.error(err));
