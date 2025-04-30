@@ -1,6 +1,6 @@
 class Api::RestaurantsController < ApplicationController
   before_action :set_restaurant, only: %i[update destroy]
-  before_action :require_owner, only: %i[show index create update destroy] # restrict this actions to owners only
+  before_action :require_owner, only: %i[index create update destroy] # restrict this actions to owners only
   include Rails.application.routes.url_helpers
 
   # GET /api/restaurants
