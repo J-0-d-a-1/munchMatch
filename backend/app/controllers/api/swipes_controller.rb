@@ -15,36 +15,19 @@ class Api::SwipesController < ApplicationController
 
   # POST api/swipes
   def create
-    return unless @user
+    return render json: { error: 'Unauthorized: User must be logged in to swipe' }, status: :unauthorized unless @user
 
-    @swipe = Swipe.find_by(user: @user, dish: @dish)
+    @swipe = Swipe.find_or_initialize_by(user: @user, dish: @dish)
 
-    # increment swipes if exist
-    if @swipe
-      # checking direction
-      if params[:direction] == 'right'
-        @swipe.increment(:right_swipes)
-      elsif params[:direction] == 'left'
-        @swipe.increment(:left_swipes)
-      end
-    else
-      # create new swipe if not exist
-      @swipe = Swipe.new(user: @user, dish: @dish)
-
-      if params[:direction] == 'right'
-        @swipe.right_swipes = 1
-      elsif params[:direction] == 'left'
-        @swipe.left_swipes = 1
-      end
-    end
+    # transfer swipes history if exist
+    @swipe.right_swipes += params[:right_swipes].to_i
+    @swipe.left_swipes += params[:left_swipes].to_i
 
     if @swipe.save
       render json: @swipe, status: :created
     else
       render json: { error: 'Unable to save swipe record' }, status: :unprocessable_entity
     end
-
-    render json: { error: 'Unauthorized: User must be logged in to swipe' }, status: :unauthorized
   end
 
   # PATCH /api/swipes/:id handleing undo swipe
