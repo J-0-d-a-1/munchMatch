@@ -2,6 +2,7 @@ import { useState } from "react";
 import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import DeleteConfirmationModal from "./DeleteConfirmationModal";
+import "../../styles/dashboard.scss";
 
 const RestaurantList = ({ restaurants, onDelete }) => {
   const [showModal, setShowModal] = useState(false);
@@ -20,10 +21,11 @@ const RestaurantList = ({ restaurants, onDelete }) => {
       <tr key={restaurant.id}>
         <td>{restaurant.name}</td>
         <td>
-          <FaEdit />
+          <FaEdit className="icon" />
         </td>
         <td>
           <MdDelete
+            className="icon"
             onClick={() => {
               setRestaurantToDelete(restaurant);
               setShowModal(true);
