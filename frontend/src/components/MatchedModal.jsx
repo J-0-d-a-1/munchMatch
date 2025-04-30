@@ -35,8 +35,7 @@ function MatchedModal(props) {
         </Modal.Header>
         <Modal.Body>
           <Card.Img
-            // src={dish.photo_url}
-            src="../../../mock_image/mexican.png"
+            src={dish.photo_url}
             style={{ width: "100%", height: "50vh" }}
           />
           <Modal.Title>{dish.name}</Modal.Title>

@@ -224,8 +224,7 @@ function MenuCard() {
               >
                 <Card.Body>
                   <Card.Img
-                    // src={dish.photo_url}
-                    src="../../../mock_image/mexican.png"
+                    src={dish.photo_url}
                     style={{ width: "200px", height: "200px" }}
                   />
                   <Card.Title className="card-title">{dish.name}</Card.Title>
