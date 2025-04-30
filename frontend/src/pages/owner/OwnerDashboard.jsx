@@ -78,7 +78,11 @@ const OwnerDashboard = () => {
         <h1>User_name Dashboard</h1>
       </div>
       <Button onClick={handleAddRestaurant}>Add Restaurant</Button>
-      <RestaurantList restaurants={restaurants} />
+      <table>
+        <tbody>
+          <RestaurantList restaurants={restaurants} />
+        </tbody>
+      </table>
     </>
   );
 };

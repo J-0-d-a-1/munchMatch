@@ -1,6 +1,19 @@
+import { MdDelete } from "react-icons/md";
+import { FaEdit } from "react-icons/fa";
+
 const RestaurantList = ({ restaurants }) => {
   const parsedRestaurants = restaurants.map((restaurant) => (
-    <p key={restaurant.id}>{restaurant.name}</p>
+    <>
+      <tr key={restaurant.id}>
+        <td>{restaurant.name}</td>
+        <td>
+          <FaEdit />
+        </td>
+        <td>
+          <MdDelete />
+        </td>
+      </tr>
+    </>
   ));
 
   return parsedRestaurants;
