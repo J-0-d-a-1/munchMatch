@@ -15,6 +15,6 @@ Rails.application.routes.draw do
     get '/dishes', to: 'dishes#all'
     resources :favorites, only: %i[index create]
     delete '/favorites/:restaurant_id', to: 'favorites#destroy'
-    resources :swipes, only: %i[index create]
+    resources :swipes, only: %i[index create update]
   end
 end
