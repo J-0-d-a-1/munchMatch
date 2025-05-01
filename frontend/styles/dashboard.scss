@@ -1,5 +1,17 @@
-.icon {
-  &:hover {
-    color: blue;
+table {
+  font-size: 1.5em;
+  .icon {
+    &:hover {
+      color: green;
+    }
+  }
+
+  .restaurant-link {
+    text-decoration: none; /* Remove the default underline */
+    color: inherit;
+    cursor: pointer; /* Change the cursor to indicate it's clickable */
+    &:hover {
+      color: green;
+    }
   }
 }

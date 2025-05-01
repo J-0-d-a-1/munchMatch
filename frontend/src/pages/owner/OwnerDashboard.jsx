@@ -62,7 +62,7 @@ const OwnerDashboard = ({ categories }) => {
 
   return (
     <>
-      <div>
+      <div className="dashboard-container">
         <h1>My Dashboard</h1>
       </div>
       <Button onClick={handleAddRestaurant}>Add Restaurant</Button>

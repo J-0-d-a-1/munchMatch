@@ -19,9 +19,11 @@ const RestaurantList = ({ restaurants, onDelete, onEdit }) => {
 
   const parsedRestaurants = restaurants.map((restaurant) => (
     <tr key={restaurant.id}>
-      <Link to={`/restaurants/${restaurant.id}`} className="restaurant-link">
-        {restaurant.name}
-      </Link>
+      <td>
+        <Link to={`/restaurants/${restaurant.id}`} className="restaurant-link">
+          {restaurant.name}
+        </Link>
+      </td>
       <td>
         <FaEdit className="icon" onClick={() => onEdit(restaurant.id)} />
       </td>
