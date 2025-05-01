@@ -1,14 +1,21 @@
 import axios from "axios";
+
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Modal from "react-bootstrap/Modal";
-import { useNavigate } from "react-router-dom";
 
 function MatchedModal(props) {
-  const { handleCloseModal, dish } = props;
+  const { handleCloseModal, dish, currentUser } = props;
 
   const [restaurant, setRestaurant] = useState(null);
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  const handleFavorite = () => {
+    setIsFavorite((prev) => !prev);
+  };
 
   const naviation = useNavigate();
 
@@ -42,7 +49,7 @@ function MatchedModal(props) {
           <p>{dish.description}</p>
           {restaurant ? (
             <p>
-              from <span>{restaurant.name}</span>
+              <span>{restaurant.name}</span>
             </p>
           ) : (
             <p>Loading restaurant...</p>
@@ -53,10 +60,17 @@ function MatchedModal(props) {
             Close
           </Button>
           <Button
+            variant={!isFavorite ? "outline-success" : "success"}
+            onClick={handleFavorite}
+          >
+            {!isFavorite ? "Save" : "Saved"}{" "}
+            {restaurant ? restaurant.name : "..."}
+          </Button>
+          <Button
             variant="primary"
             onClick={() => handleMenuList(dish.restaurant_id)}
           >
-            See Menu
+            More menu
           </Button>
         </Modal.Footer>
       </Modal>

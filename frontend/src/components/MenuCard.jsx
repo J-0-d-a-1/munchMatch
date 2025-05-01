@@ -63,8 +63,6 @@ function MenuCard() {
         );
       }
 
-      console.log("Syncing local swipes to DB");
-
       // clear localstrage
       localStorage.removeItem("swipeHistory");
     } catch (error) {
@@ -244,7 +242,11 @@ function MenuCard() {
   return (
     <div>
       {isModalOpen && (
-        <MatchedModal handleCloseModal={handleCloseModal} dish={matchedDish} />
+        <MatchedModal
+          handleCloseModal={handleCloseModal}
+          dish={matchedDish}
+          currentUser={currentUser}
+        />
       )}
       <h1>What are you munching today?</h1>
       <div className="card-container">
