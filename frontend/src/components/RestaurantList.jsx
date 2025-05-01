@@ -4,7 +4,7 @@ import { FaEdit } from "react-icons/fa";
 import DeleteConfirmationModal from "./DeleteConfirmationModal";
 import "../../styles/dashboard.scss";
 
-const RestaurantList = ({ restaurants, onDelete }) => {
+const RestaurantList = ({ restaurants, onDelete, onEdit, categories }) => {
   const [showModal, setShowModal] = useState(false);
   const [restaurantToDelete, setRestaurantToDelete] = useState(null);
 
@@ -20,7 +20,7 @@ const RestaurantList = ({ restaurants, onDelete }) => {
     <tr key={restaurant.id}>
       <td>{restaurant.name}</td>
       <td>
-        <FaEdit className="icon" />
+        <FaEdit className="icon" onClick={() => onEdit(restaurant.id)} />
       </td>
       <td>
         <MdDelete
