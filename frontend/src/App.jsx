@@ -9,11 +9,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 // Authorization components
 import { AuthProvider } from "./contexts/AuthContext";
-import {
-  OwnerRoute,
-  PrivateRoute,
-  PublicOnlyRoute,
-} from "./components/authorization/ProtectedRoutes";
+import { OwnerRoute, PrivateRoute, PublicOnlyRoute } from "./components/authorization/ProtectedRoutes";
 
 // Page components for regular users
 import HomePage from "./pages/user/HomePage";
@@ -90,7 +86,6 @@ function App() {
           />
 
           {/* Owner-only routes */}
-
           <Route
             path="/user/restaurants"
             element={
@@ -124,8 +119,10 @@ function App() {
             }
           />
         </Routes>
+        <div className="Footer">
+          <Footer />
+        </div>
       </Router>
-      {/* <Footer /> */}
     </AuthProvider>
   );
 }
