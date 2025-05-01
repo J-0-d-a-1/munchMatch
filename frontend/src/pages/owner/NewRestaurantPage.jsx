@@ -371,6 +371,7 @@ function NewRestaurantPage({ categories }) {
           onClick={saveDishes}
           disabled={savingDishes || dishes.length === 0}
           className="mt-3"
+          variant="success"
         >
           {savingDishes ? "Saving Dishes..." : "Create"}
         </Button>
