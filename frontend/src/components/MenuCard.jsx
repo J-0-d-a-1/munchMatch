@@ -7,7 +7,9 @@ import axios from "axios";
 
 import "../Temp.css";
 
-function MenuCard() {
+function MenuCard(props) {
+  const { selectedCategory } = props;
+
   const [currentUser, setCurrentUser] = useState(null);
 
   const [dishCards, setDishCards] = useState([]);
@@ -81,13 +83,24 @@ function MenuCard() {
 
   // get the dishes
   useEffect(() => {
-    axios
-      .get("/api/dishes")
-      .then((res) => {
-        setDishCards(res.data);
-      })
-      .catch((err) => console.error(err));
-  }, []);
+    if (!selectedCategory) {
+      // fetching all dishes
+      axios
+        .get("/api/dishes")
+        .then((res) => {
+          setDishCards(res.data);
+        })
+        .catch((err) => console.error(err));
+    } else {
+      // fetching selectedCategory dishes
+      axios
+        .get(`/api/dishes/filterby/${selectedCategory}`)
+        .then((res) => {
+          setDishCards(res.data);
+        })
+        .catch((err) => console.error(err));
+    }
+  }, [selectedCategory]);
 
   // get the curentIndex after fething dishes
   useEffect(() => {

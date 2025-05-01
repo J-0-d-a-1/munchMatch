@@ -18,6 +18,13 @@ class Api::DishesController < ApplicationController
     render json: @dishes.map { |dish| dish_with_photo_url(dish) }
   end
 
+  # GET /api/dishes/filterby/:category_id
+  # Show all dishes of the category from all restaurants
+  def category
+    @dishes = Dish.joins(:restaurant).where(restaurants: { category_id: params[:category_id] }).with_attached_photo
+    render json: @dishes.map { |dish| dish_with_photo_url(dish) }
+  end
+
   # GET /api/dishes/:id
   # Show one dish by its id
   def show
