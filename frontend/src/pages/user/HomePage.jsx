@@ -16,7 +16,7 @@ function HomePage({ categories }) {
         onSelectCategory={handleCategorySelect}
         selectedCategory={selectedCategory}
       />
-      <MenuCard />
+      <MenuCard selectedCategory={selectedCategory} />
     </div>
   );
 }

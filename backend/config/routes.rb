@@ -13,6 +13,7 @@ Rails.application.routes.draw do
     end
     resources :dishes, only: %i[show update destroy]
     get '/dishes', to: 'dishes#all'
+    get '/dishes/filterby/:category_id', to: 'dishes#category'
     resources :favorites, only: %i[index create]
     delete '/favorites/:restaurant_id', to: 'favorites#destroy'
     resources :swipes, only: %i[index create update]
