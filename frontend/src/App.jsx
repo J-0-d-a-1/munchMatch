@@ -28,7 +28,6 @@ import OwnerDashboard from "./pages/owner/OwnerDashboard";
 import RestaurantPage from "./pages/owner/RestaurantPage";
 import DishPage from "./pages/owner/DishPage";
 import NewRestaurantPage from "./pages/owner/NewRestaurantPage";
-import EditRestaurantPage from "./pages/owner/EditRestaurantPage";
 
 function App() {
   const [categories, setCategories] = useState([]);
@@ -121,14 +120,6 @@ function App() {
             element={
               <OwnerRoute>
                 <NewRestaurantPage categories={categories} />
-              </OwnerRoute>
-            }
-          />
-          <Route
-            path="/user/restaurants/:restaurant_id/edit"
-            element={
-              <OwnerRoute>
-                <EditRestaurantPage />
               </OwnerRoute>
             }
           />
