@@ -1,13 +1,12 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import RestaurantList from "../../components/RestaurantList";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
 
 const OwnerDashboard = () => {
   const [restaurants, setRestaurants] = useState([]);
   const [selectedRestaurantId, setSelectedRestaurantId] = useState(null);
-  const [editingRestaurantId, setEditingRestaurantId] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,29 +21,6 @@ const OwnerDashboard = () => {
     fetchRestaurants();
   }, []);
 
-  const handleSelectRestaurant = (restaurant_id) => {
-    setSelectedRestaurantId(restaurant_id);
-  };
-
-  const handleUpdateRestaurant = async (id, updatedRestaurantData) => {
-    try {
-      const response = await axios.put(
-        `/api/restaurants/${id}`,
-        updatedRestaurantData
-      );
-      setRestaurants(
-        restaurants.map((restaurant) =>
-          restaurant.id === id
-            ? { ...restaurant, ...response.data }
-            : restaurant
-        )
-      );
-      setEditingRestaurantId(null);
-    } catch (error) {
-      console.error("Error updating restaurant:", error);
-    }
-  };
-
   const handleDeleteRestaurant = async (restaurant_id) => {
     try {
       await axios.delete(`/api/restaurants/${restaurant_id}`);
@@ -56,10 +32,6 @@ const OwnerDashboard = () => {
       console.error("Error deleting restaurant:", error);
     }
   };
-
-  const selectedRestaurant = restaurants.find(
-    (restaurant) => restaurant.id === selectedRestaurantId
-  );
 
   const handleAddRestaurant = () => navigate("/user/restaurants/new");
 
