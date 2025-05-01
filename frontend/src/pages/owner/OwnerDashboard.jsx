@@ -45,8 +45,6 @@ const OwnerDashboard = ({ categories }) => {
   const handleCloseEditModal = () => {
     setShowEditModal(false);
     setSelectedRestaurantId(null);
-    // Optionally, you might want to refresh the restaurant list here
-    // fetchRestaurants();
   };
 
   const handleRestaurantUpdated = (updatedRestaurant) => {
@@ -59,14 +57,12 @@ const OwnerDashboard = ({ categories }) => {
   };
 
   const handleDishesUpdated = (updatedDishes) => {
-    // You might not need to do anything specific here in the dashboard
-    // as the changes are reflected when the user views the restaurant.
     console.log("Dishes updated:", updatedDishes);
   };
 
   return (
     <>
-      <div>
+      <div className="dashboard-container">
         <h1>My Dashboard</h1>
       </div>
       <Button onClick={handleAddRestaurant}>Add Restaurant</Button>
@@ -83,7 +79,7 @@ const OwnerDashboard = ({ categories }) => {
         show={showEditModal}
         onHide={handleCloseEditModal}
         restaurantIdToEdit={selectedRestaurantId}
-        categories={categories} // Pass the categories prop directly
+        categories={categories} //to display categories in drop down menu
         onRestaurantUpdated={handleRestaurantUpdated}
         onDishesUpdated={handleDishesUpdated}
       />
