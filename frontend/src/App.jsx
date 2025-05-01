@@ -45,11 +45,10 @@ function App() {
       <Router>
         <div className="App">
           <TopNavigation />
-          <Category categories={categories} />
         </div>
         <Routes>
           {/* Public routes */}
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<HomePage categories={categories} />} />
           <Route
             path="/restaurants/:restaurant_id"
             element={<RestaurantMenuPage />}

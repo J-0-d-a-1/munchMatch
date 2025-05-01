@@ -1,13 +1,26 @@
-function Category({ categories }) {
+import { Button } from 'react-bootstrap';
+
+function Category({ categories, onSelectCategory, selectedCategory }) {
   return (
-    <div>
-      {categories.map((category) => {
-        return (
-          <a key={category.name} style={{ display: "inline-block" }}>
-            <div>{category.name}</div>
-          </a>
-        );
-      })}
+    <div className="category-container">
+      <Button
+        variant={selectedCategory === null ? 'primary' : 'outline-primary'}
+        className="category-btn me-2 mb-2"
+        onClick={() => onSelectCategory(null)}
+      >
+        All
+      </Button>
+
+      {categories.map((category) => (
+        <Button
+          key={category.id}
+          variant={selectedCategory === category.id ? 'primary' : 'outline-primary'}
+          className="category-btn me-2 mb-2"
+          onClick={() => onSelectCategory(category.id)}
+        >
+          {category.name}
+        </Button>
+      ))}
     </div>
   );
 }
