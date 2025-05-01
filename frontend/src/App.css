@@ -40,3 +40,8 @@
 .read-the-docs {
   color: #888;
 }
+
+/* Add padding to bottom to prevent content from being hidden by fixed footer */
+.flex-grow-1 {
+  padding-bottom: 70px;
+}
