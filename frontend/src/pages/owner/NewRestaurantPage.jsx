@@ -26,6 +26,7 @@ function NewRestaurantPage({ categories }) {
     { id: "", name: "", description: "", price: "", photo: null },
   ]);
   const [savingRestaurant, setSavingRestaurant] = useState(false);
+  const [dishesAdded, setDishesAdded] = useState(false);
   const [savingDishes, setSavingDishes] = useState(false);
   const [restaurantSaveError, setRestaurantSaveError] = useState(null);
   const [dishesSaveError, setDishesSaveError] = useState(null);
@@ -144,13 +145,29 @@ function NewRestaurantPage({ categories }) {
       ...dishes,
       { id: "", name: "", description: "", price: "", photo: null },
     ]);
+    setDishesAdded(true);
   };
 
   const handleDeleteDish = (index) => {
-    setDishes((prevDishes) => prevDishes.filter((_, i) => i !== index));
+    const updatedDishes = dishes.filter((_, i) => i !== index);
+    setDishes(updatedDishes);
+    if (updatedDishes.length === 0) {
+      setDishesAdded(false); // Reset the flag if all dishes are removed
+    }
   };
 
-  const handleCancel = () => navigate("/user/restaurants");
+  const handleCancel = async () => {
+    if (restaurantId && !dishesAdded) {
+      try {
+        await axios.delete(`/api/restaurants/${restaurantId}`);
+        console.log("Empty restaurant deleted.");
+      } catch (error) {
+        console.error("Error deleting empty restaurant:", error);
+        // Optionally show an error message to the user
+      }
+    }
+    navigate("/user/restaurants");
+  };
 
   return (
     <div>
