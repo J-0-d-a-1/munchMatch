@@ -63,8 +63,8 @@ function MatchedModal(props) {
             variant={!isFavorite ? "outline-success" : "success"}
             onClick={handleFavorite}
           >
-            {!isFavorite ? "Save" : "Saved"}{" "}
-            {restaurant ? restaurant.name : "..."}
+            {!isFavorite && `Save ${restaurant ? restaurant.name : "..."}`}
+            {isFavorite && "Saved"}
           </Button>
           <Button
             variant="primary"
