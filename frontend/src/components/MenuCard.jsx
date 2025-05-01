@@ -3,42 +3,15 @@ import TinderCard from "react-tinder-card";
 import MatchedModal from "./MatchedModal";
 import { Card, Button } from "react-bootstrap";
 
+import axios from "axios";
+
 import "../Temp.css";
 
-const data = [
-  {
-    id: 1,
-    name: "Sushi",
-    description: "Japanese Traditional food",
-    restaurant_id: 1,
-    prince_in_cent: 2000,
-    photo_url: "../../../mock_image/japanese.png",
-    category_id: 1,
-  },
-  {
-    id: 2,
-    name: "Curry",
-    description: "Indian Traditional food",
-    restaurant_id: 2,
-    prince_in_cent: 2000,
-    photo_url: "../../../mock_image/indian.png",
-    category_id: 2,
-  },
-  {
-    id: 3,
-    name: "Tacos",
-    description: "Mexican Traditional food",
-    restaurant_id: 3,
-    prince_in_cent: 2000,
-    photo_url: "../../../mock_image/mexican.png",
-    category_id: 3,
-  },
-];
-
 function MenuCard() {
-  const dishCards = data;
+  const [currentUser, setCurrentUser] = useState(null);
 
-  const [currentIndex, setCurrentIndex] = useState(dishCards.length - 1);
+  const [dishCards, setDishCards] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(null);
   const [lastDirection, setLastDirection] = useState();
   const saveSwiped = JSON.parse(localStorage.getItem("swipeHistory")) || [];
   const [swipedHistory, setSwipedHistory] = useState(saveSwiped);
@@ -53,19 +26,90 @@ function MenuCard() {
     setIsModalOpen(false);
   };
 
+  // get current user
+  useEffect(() => {
+    axios
+      .get("api/sessions/current", { withCredentials: true })
+      .then((res) => {
+        setCurrentUser(res.data);
+      })
+      .catch((err) => console.error(err));
+  }, []);
+
+  // connecting localstorage to database
+  const syncSwipeHistoryToDB = async () => {
+    // get history from localstrage
+    const localSwipeHistories = JSON.parse(
+      localStorage.getItem("swipeHistory")
+    );
+
+    if (!localSwipeHistories || localSwipeHistories.length === 0) return;
+
+    try {
+      for (const history of localSwipeHistories) {
+        const { dish_id, right_swipes, left_swipes } = history;
+
+        // send POST to backend each item
+        await axios.post(
+          "/api/swipes",
+          {
+            dish_id,
+            right_swipes,
+            left_swipes,
+          },
+          {
+            withCredentials: true,
+          }
+        );
+      }
+
+      console.log("Syncing local swipes to DB");
+
+      // clear localstrage
+      localStorage.removeItem("swipeHistory");
+    } catch (error) {
+      console.error("Error syncing swipe history:", error);
+    }
+  };
+
+  // excute fetching localstrage history
+  useEffect(() => {
+    if (currentUser && localStorage.getItem("swipeHistory")) {
+      syncSwipeHistoryToDB();
+    }
+  }, [currentUser]);
+
+  // get the dishes
+  useEffect(() => {
+    axios
+      .get("/api/dishes")
+      .then((res) => {
+        setDishCards(res.data);
+      })
+      .catch((err) => console.error(err));
+  }, []);
+
+  // get the curentIndex after fething dishes
+  useEffect(() => {
+    if (dishCards.length > 0) {
+      setCurrentIndex(dishCards.length - 1);
+      currentIndexRef.current = dishCards.length - 1;
+    }
+  }, [dishCards]);
+
   // initializing stored history from localstrage
   useEffect(() => {
     const storedHistory = localStorage.getItem("swipeHistory");
     if (storedHistory) setSwipedHistory(JSON.parse(storedHistory));
   }, []);
 
-  // creating an array of refs (childRefs) for each dish of dishCards array -> to interact actual DOM individually
+  // array of refs (childRefs) for each dish of dishCards array -> to interact actual DOM individually
   const childRefs = useMemo(
     () =>
       Array(dishCards.length)
         .fill(0)
-        .map((i) => React.createRef()),
-    []
+        .map(() => React.createRef()),
+    [dishCards.length]
   );
 
   const updateCurrentIndex = (index) => {
@@ -78,7 +122,7 @@ function MenuCard() {
   const canSwipe = currentIndex >= 0;
 
   // handle the case in which go back is pressed before card goes outOfFrame
-  const outOfFrame = (name, index, direction) => {
+  const outOfFrame = (index, direction) => {
     if (currentIndexRef.current >= index) {
       childRefs[index].current.restoreCard();
       updateCurrentIndex(index - 1);
@@ -97,7 +141,10 @@ function MenuCard() {
 
     if (triggerByButton) {
       // Trigger swipe action/animation
-      await childRefs[currentIndex].current.swipe(direction);
+      const ref = childRefs[currentIndex]?.current;
+      if (ref) {
+        await ref.swipe(direction);
+      }
       return;
     }
 
@@ -143,8 +190,27 @@ function MenuCard() {
         ];
       }
 
-      // storing swipeHistory in local sotrage
-      localStorage.setItem("swipeHistory", JSON.stringify(updatedHistory));
+      if (currentUser?.id) {
+        // storing to DB after login
+        const updatedSwipe = updatedHistory.find(
+          (entry) => entry.dish_id === currentDishId
+        );
+        const { dish_id, right_swipes, left_swipes } = updatedSwipe;
+        axios.post(
+          "/api/swipes",
+          {
+            dish_id,
+            right_swipes,
+            left_swipes,
+          },
+          {
+            withCredentials: true,
+          }
+        );
+      } else {
+        // storing swipeHistory in local sotrage
+        localStorage.setItem("swipeHistory", JSON.stringify(updatedHistory));
+      }
 
       return updatedHistory;
     });
@@ -182,35 +248,34 @@ function MenuCard() {
       )}
       <h1>What are you munching today?</h1>
       <div className="card-container">
-        {dishCards.map(
-          (dish, index) =>
-            index <= currentIndex && (
-              <TinderCard
-                key={dish.id}
-                ref={childRefs[index]}
-                className="swipe"
-                preventSwipe={["up", "down"]}
-                onSwipe={(direction) => handleSwipe(direction)}
-                onCardLeftScreen={(direction) =>
-                  outOfFrame(dish.name, index, direction)
-                }
+        {dishCards.map((dish, index) => {
+          if (currentIndex === null || index > currentIndex) return null;
+
+          return (
+            <TinderCard
+              key={dish.id}
+              ref={childRefs[index]}
+              className="swipe"
+              preventSwipe={["up", "down"]}
+              onSwipe={(direction) => handleSwipe(direction)}
+              onCardLeftScreen={(direction) => outOfFrame(index, direction)}
+            >
+              <Card
+                style={{
+                  width: "18rem",
+                }}
               >
-                <Card
-                  style={{
-                    width: "18rem",
-                  }}
-                >
-                  <Card.Body>
-                    <Card.Img
-                      src={dish.photo_url}
-                      style={{ width: "200px", height: "200px" }}
-                    />
-                    <Card.Title className="card-title">{dish.name}</Card.Title>
-                  </Card.Body>
-                </Card>
-              </TinderCard>
-            )
-        )}
+                <Card.Body>
+                  <Card.Img
+                    src={dish.photo_url}
+                    style={{ width: "200px", height: "200px" }}
+                  />
+                  <Card.Title className="card-title">{dish.name}</Card.Title>
+                </Card.Body>
+              </Card>
+            </TinderCard>
+          );
+        })}
         <div className="btn-container">
           <Button variant="danger" onClick={() => handleSwipe("left", true)}>
             Nah!
