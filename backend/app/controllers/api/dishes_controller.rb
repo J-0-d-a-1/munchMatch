@@ -67,8 +67,8 @@ class Api::DishesController < ApplicationController
 
   # rubocop:disable Style/GuardClause
   def require_owner
-    unless current_user && @restaurant && @restaurant.user_id == current_user.id
-      render json: { error: 'Restaurant not found or you are not the owner' }, status: :not_found
+    unless current_user && @dish&.restaurant&.user_id == current_user.id
+      render json: { error: 'You are not the owner of this restaurant or dish not found.' }, status: :not_found
     end
   end
   # rubocop:enable Style/GuardClause
