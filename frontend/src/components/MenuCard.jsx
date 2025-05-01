@@ -29,7 +29,7 @@ function MenuCard() {
   // get current user
   useEffect(() => {
     axios
-      .get("api/sessions/current")
+      .get("api/sessions/current", { withCredentials: true })
       .then((res) => {
         setCurrentUser(res.data);
       })
@@ -62,6 +62,8 @@ function MenuCard() {
           }
         );
       }
+
+      console.log("Syncing local swipes to DB");
 
       // clear localstrage
       localStorage.removeItem("swipeHistory");
@@ -188,8 +190,27 @@ function MenuCard() {
         ];
       }
 
-      // storing swipeHistory in local sotrage
-      localStorage.setItem("swipeHistory", JSON.stringify(updatedHistory));
+      if (currentUser?.id) {
+        // storing to DB after login
+        const updatedSwipe = updatedHistory.find(
+          (entry) => entry.dish_id === currentDishId
+        );
+        const { dish_id, right_swipes, left_swipes } = updatedSwipe;
+        axios.post(
+          "/api/swipes",
+          {
+            dish_id,
+            right_swipes,
+            left_swipes,
+          },
+          {
+            withCredentials: true,
+          }
+        );
+      } else {
+        // storing swipeHistory in local sotrage
+        localStorage.setItem("swipeHistory", JSON.stringify(updatedHistory));
+      }
 
       return updatedHistory;
     });

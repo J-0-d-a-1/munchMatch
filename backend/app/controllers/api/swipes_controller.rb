@@ -1,6 +1,6 @@
 class Api::SwipesController < ApplicationController
   before_action :set_dish, only: %i[create update]
-  before_action :set_user, only: %i[create update]
+  before_action :set_user, only: %i[index create update]
 
   # GET /swipes
   def index
