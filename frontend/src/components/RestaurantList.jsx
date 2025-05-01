@@ -17,23 +17,21 @@ const RestaurantList = ({ restaurants, onDelete }) => {
   };
 
   const parsedRestaurants = restaurants.map((restaurant) => (
-    <>
-      <tr key={restaurant.id}>
-        <td>{restaurant.name}</td>
-        <td>
-          <FaEdit className="icon" />
-        </td>
-        <td>
-          <MdDelete
-            className="icon"
-            onClick={() => {
-              setRestaurantToDelete(restaurant);
-              setShowModal(true);
-            }}
-          />
-        </td>
-      </tr>
-    </>
+    <tr key={restaurant.id}>
+      <td>{restaurant.name}</td>
+      <td>
+        <FaEdit className="icon" />
+      </td>
+      <td>
+        <MdDelete
+          className="icon"
+          onClick={() => {
+            setRestaurantToDelete(restaurant);
+            setShowModal(true);
+          }}
+        />
+      </td>
+    </tr>
   ));
 
   return (
