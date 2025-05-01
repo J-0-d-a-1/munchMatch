@@ -25,8 +25,8 @@ import FavoritesPage from "./pages/user/FavoritesPage";
 
 // Page components for restaurant owners
 import OwnerDashboard from "./pages/owner/OwnerDashboard";
-import RestaurantPage from "./pages/owner/RestaurantPage";
-import DishPage from "./pages/owner/DishPage";
+// import RestaurantPage from "./pages/owner/RestaurantPage";
+// import DishPage from "./pages/owner/DishPage";
 import NewRestaurantPage from "./pages/owner/NewRestaurantPage";
 
 function App() {
@@ -99,7 +99,7 @@ function App() {
               </OwnerRoute>
             }
           />
-          <Route
+          {/* <Route
             path="/user/restaurants/:restaurant_id"
             element={
               <OwnerRoute>
@@ -114,7 +114,7 @@ function App() {
                 <DishPage />
               </OwnerRoute>
             }
-          />
+          /> */}
           <Route
             path="/user/restaurants/new"
             element={
