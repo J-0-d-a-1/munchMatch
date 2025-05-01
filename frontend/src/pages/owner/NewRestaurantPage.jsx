@@ -21,10 +21,14 @@ function NewRestaurantPage({ categories }) {
     category: null,
     logo: null,
   });
-
+  const [restaurantId, setRestaurantId] = useState(null);
   const [dishes, setDishes] = useState([
     { id: "", name: "", description: "", price: "", photo: null },
   ]);
+  const [savingRestaurant, setSavingRestaurant] = useState(false);
+  const [savingDishes, setSavingDishes] = useState(false);
+  const [restaurantSaveError, setRestaurantSaveError] = useState(null);
+  const [dishesSaveError, setDishesSaveError] = useState(null);
 
   const parsedCategories = categories.map((category) => (
     <option key={category.id} value={category.id}>
@@ -32,7 +36,7 @@ function NewRestaurantPage({ categories }) {
     </option>
   ));
 
-  const handleSubmit = async (event) => {
+  const saveRestaurant = async (event) => {
     event.preventDefault();
     event.stopPropagation();
 
@@ -42,6 +46,9 @@ function NewRestaurantPage({ categories }) {
       setValidated(true);
       return;
     }
+
+    setSavingRestaurant(true);
+    setRestaurantSaveError(null);
 
     const fullLocation = `${restaurantData.address}, ${restaurantData.city}, ${restaurantData.province}, ${restaurantData.country}, ${restaurantData.postalCode}`;
 
@@ -53,7 +60,6 @@ function NewRestaurantPage({ categories }) {
     formData.append("restaurant[logo]", restaurantData.logo);
 
     try {
-      // Create the restaurant first
       const restaurantResponse = await axios.post(
         "/api/restaurants",
         formData,
@@ -62,15 +68,29 @@ function NewRestaurantPage({ categories }) {
         }
       );
 
-      console.log("Restaurant created successfully:", restaurantResponse);
+      console.log("Restaurant saved successfully:", restaurantResponse);
+      setRestaurantId(restaurantResponse.data.id);
+    } catch (error) {
+      console.error("Error saving restaurant:", error);
+      setRestaurantSaveError("Failed to save restaurant.");
+    } finally {
+      setSavingRestaurant(false);
+    }
+  };
 
-      const restaurantId = restaurantResponse.data.id;
+  const saveDishes = async () => {
+    if (!restaurantId) {
+      setRestaurantSaveError("Please create a restaurant first.");
+      return;
+    }
 
-      // Now create each dish individually
+    setSavingDishes(true);
+    setDishesSaveError(null);
+
+    try {
       await Promise.all(
         dishes.map(async (dish) => {
           const dishFormData = new FormData();
-
           dishFormData.append("dish[name]", dish.name);
           dishFormData.append("dish[description]", dish.description);
           dishFormData.append("dish[price]", dish.price);
@@ -86,9 +106,13 @@ function NewRestaurantPage({ categories }) {
         })
       );
 
+      console.log("Dishes saved successfully!");
       navigate(`/restaurants/${restaurantId}`);
     } catch (error) {
-      console.error("Error creating restaurant or dishes:", error);
+      console.error("Error saving dishes:", error);
+      setDishesSaveError("Failed to save dishes.");
+    } finally {
+      setSavingDishes(false);
     }
   };
 
@@ -131,7 +155,7 @@ function NewRestaurantPage({ categories }) {
   return (
     <div>
       <h1>Create your restaurant here!</h1>
-      <Form noValidate validated={validated} onSubmit={handleSubmit}>
+      <Form noValidate validated={validated} onSubmit={saveRestaurant}>
         <Form.Group className="mb-3 text-start">
           <Form.Label>Logo</Form.Label>
           <Form.Control
@@ -140,9 +164,6 @@ function NewRestaurantPage({ categories }) {
             name="logo"
             onChange={handleChange}
           />
-          <Form.Control.Feedback type="invalid" tooltip>
-            Please upload a logo.
-          </Form.Control.Feedback>
         </Form.Group>
         <Form.Group className="mb-3 text-start">
           <Form.Label>Restaurant&apos;s name</Form.Label>
@@ -250,77 +271,97 @@ function NewRestaurantPage({ categories }) {
             </Form.Control.Feedback>
           </Form.Group>
         </Row>
-        <fieldset className="mb-3 text-start">
-          <legend>Create a dish</legend>
-          {dishes.map((dish, index) => (
-            <div key={index}>
-              <Form.Group className="position-relative mb-3">
-                <Form.Label>Photo</Form.Label>
-                <Form.Control
-                  type="file"
-                  required
-                  name={`dishes[${index}].photo`}
-                  onChange={handleChange}
-                />
-                <Form.Control.Feedback type="invalid" tooltip>
-                  Please upload a photo.
-                </Form.Control.Feedback>
-              </Form.Group>
-              <Form.Group className="mb-3 text-start">
-                <Form.Label>Dish name</Form.Label>
-                <Form.Control
-                  type="text"
-                  name={`dishes[${index}].name`}
-                  required
-                  onChange={handleChange}
-                />
-                <Form.Control.Feedback type="invalid">
-                  This field can&apos;t be empty.
-                </Form.Control.Feedback>
-              </Form.Group>
-              <Form.Group className="mb-3 text-start">
-                <Form.Label>Description</Form.Label>
-                <Form.Control
-                  as="textarea"
-                  rows={3}
-                  name={`dishes[${index}].description`}
-                  required
-                  onChange={handleChange}
-                />
-                <Form.Control.Feedback type="invalid">
-                  This field can&apos;t be empty.
-                </Form.Control.Feedback>
-              </Form.Group>
-              <Form.Label>Price</Form.Label>
-              <InputGroup className="mb-3 text-start">
-                <InputGroup.Text>$</InputGroup.Text>
-                <Form.Control
-                  type="number"
-                  step="0.01"
-                  name={`dishes[${index}].price`}
-                  required
-                  onChange={handleChange}
-                />
-                <Form.Control.Feedback type="invalid">
-                  Please enter a price.
-                </Form.Control.Feedback>
-              </InputGroup>
-              <Button
-                type="button"
-                variant="danger"
-                onClick={() => handleDeleteDish(index)}
-                className="mb-3 text-end"
-              >
-                Delete dish
-              </Button>
-            </div>
-          ))}
-          <Button type="button" onClick={handleAddDish}>
-            Add dish
-          </Button>
-        </fieldset>
-        <Button type="submit">Create</Button>
-        <Button onClick={handleCancel} variant="secondary">
+        <Button type="submit" disabled={savingRestaurant}>
+          {savingRestaurant ? "Saving Restaurant..." : "Add dishes"}
+        </Button>
+        {restaurantSaveError && (
+          <p className="text-danger mt-2">{restaurantSaveError}</p>
+        )}
+
+        {restaurantId && (
+          <fieldset className="mb-3 text-start mt-3">
+            <legend>Add Dishes</legend>
+            {dishes.map((dish, index) => (
+              <div key={index}>
+                <Form.Group className="position-relative mb-3">
+                  <Form.Label>Photo</Form.Label>
+                  <Form.Control
+                    type="file"
+                    required={dishes.length === 1} // Require at least one dish photo
+                    name={`dishes[${index}].photo`}
+                    onChange={handleChange}
+                  />
+                  <Form.Control.Feedback type="invalid" tooltip>
+                    Please upload a photo.
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group className="mb-3 text-start">
+                  <Form.Label>Dish name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name={`dishes[${index}].name`}
+                    required
+                    onChange={handleChange}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    This field can&apos;t be empty.
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group className="mb-3 text-start">
+                  <Form.Label>Description</Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    rows={3}
+                    name={`dishes[${index}].description`}
+                    required
+                    onChange={handleChange}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    This field can&apos;t be empty.
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Label>Price</Form.Label>
+                <InputGroup className="mb-3 text-start">
+                  <InputGroup.Text>$</InputGroup.Text>
+                  <Form.Control
+                    type="number"
+                    step="0.01"
+                    name={`dishes[${index}].price`}
+                    required
+                    onChange={handleChange}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    Please enter a price.
+                  </Form.Control.Feedback>
+                </InputGroup>
+                <Button
+                  type="button"
+                  variant="danger"
+                  onClick={() => handleDeleteDish(index)}
+                  className="mb-3 text-end"
+                >
+                  Delete dish
+                </Button>
+              </div>
+            ))}
+            <Button type="button" onClick={handleAddDish}>
+              Add dish
+            </Button>
+          </fieldset>
+        )}
+        <Button
+          type="button"
+          onClick={saveDishes}
+          disabled={savingDishes || dishes.length === 0}
+          className="mt-3"
+        >
+          {savingDishes ? "Saving Dishes..." : "Create"}
+        </Button>
+        {dishesSaveError && (
+          <p className="text-danger mt-2">{dishesSaveError}</p>
+        )}
+
+        <Button onClick={handleCancel} variant="secondary" className="mt-3">
           Cancel
         </Button>
       </Form>
