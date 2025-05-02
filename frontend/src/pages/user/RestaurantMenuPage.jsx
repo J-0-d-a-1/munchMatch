@@ -35,7 +35,7 @@ function DishesList() {
       <div className="dish__dedescription">
         <p>{dish.description}</p>
         <div className="photo-list__dish-price">
-          <p>{formatPrice(dish.price_in_cents)}</p>
+          <span>{formatPrice(dish.price_in_cents)}</span>
         </div>
       </div>
     </div>
