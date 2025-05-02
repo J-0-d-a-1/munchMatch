@@ -1,7 +1,13 @@
 #root {
-  max-width: 555px;
+  max-width: 600px;
   margin: 0 auto;
   text-align: center;
+}
+
+.App {
+  display: grid;
+  grid-template-rows: min-content auto min-content;
+  min-height: 100vh
 }
 
 .card {
@@ -14,5 +20,6 @@
 
 /* Add padding to bottom to prevent content from being hidden by fixed footer */
 .flex-grow-1 {
-  padding-bottom: 70px;
+  padding-top: 20px;
+  padding-bottom: 100px
 }
