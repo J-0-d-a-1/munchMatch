@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import MenuCard from "../../components/MenuCard";
 import Category from "../../components/Category";
 
-function HomePage({ categories, currentUser, setCurrentUser }) {
+function HomePage({ categories, currentUser, setCurrentUser, handleMenuList }) {
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   const handleCategorySelect = (categoryId) => {
@@ -16,7 +16,11 @@ function HomePage({ categories, currentUser, setCurrentUser }) {
         onSelectCategory={handleCategorySelect}
         selectedCategory={selectedCategory}
       />
-      <MenuCard currentUser={currentUser} setCurrentUser={setCurrentUser} />
+      <MenuCard
+        currentUser={currentUser}
+        setCurrentUser={setCurrentUser}
+        handleMenuList={handleMenuList}
+      />
     </div>
   );
 }

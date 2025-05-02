@@ -13,7 +13,7 @@ function MatchedModal(props) {
   const [restaurant, setRestaurant] = useState(null);
   const [favoriteIds, setFavoriteIds] = useState([]);
   const [favoritesLoaded, setFavoritesLoaded] = useState(false);
-  const naviation = useNavigate();
+  const navigation = useNavigate();
 
   // Fetch user's favorite restaurant ids
   useEffect(() => {
@@ -74,7 +74,7 @@ function MatchedModal(props) {
 
   // navigate to the menu
   const handleMenuList = (restaurant_id) => {
-    naviation(`/restaurants/${restaurant_id}`);
+    navigation(`/restaurants/${restaurant_id}`);
   };
 
   return (
