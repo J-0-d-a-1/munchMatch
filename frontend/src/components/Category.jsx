@@ -1,4 +1,3 @@
-import { Button } from "react-bootstrap";
 import "../../styles/category.scss";
 import MexicanIcon from "../assets/mexican_icon.png";
 import JapaneseIcon from "../assets/japanese_icon.png";
