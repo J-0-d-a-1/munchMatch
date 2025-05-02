@@ -13,7 +13,7 @@ function Footer() {
 
   return (
     <Navbar className="bg-body-tertiary mt-auto">
-      <Container>
+      <Container className="footer">
         <Nav className="w-100 justify-content-around">
           {/* Default view */}
           <Nav.Link as={Link} to="/">
