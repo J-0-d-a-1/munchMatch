@@ -1,8 +1,17 @@
-img.restaurant__logo {
-  object-fit: cover;
-  border-radius: 100%;
-  vertical-align: middle;
-  margin-right: 8px;
-  width: 40px;
-  height: 40px;
+.restaurant-info {
+  header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1em;
+
+    img.restaurant__logo {
+      object-fit: cover;
+      border-radius: 100%;
+      vertical-align: middle;
+      margin-right: 8px;
+      width: 40px;
+      height: 40px;
+    }
+  }
 }

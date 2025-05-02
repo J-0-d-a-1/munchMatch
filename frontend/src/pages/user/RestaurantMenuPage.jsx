@@ -44,20 +44,23 @@ function DishesList() {
   return (
     <>
       {restaurant && (
-        <div className="restaurant-header">
-          {restaurant.logo_url && (
-            <img
-              className="restaurant__logo"
-              src={restaurant.logo_url}
-              alt={`${restaurant.name} logo`}
-            />
-          )}
-          <h2>{restaurant.name}</h2>
-          <h5>{restaurant.description}</h5>
-        </div>
+        <section className="restaurant-info">
+          <header>
+            {restaurant.logo_url && (
+              <img
+                className="restaurant__logo"
+                src={restaurant.logo_url}
+                alt={`${restaurant.name} logo`}
+              />
+            )}
+            <h2>{restaurant.name}</h2>
+          </header>
+
+          <p>{restaurant.description}</p>
+        </section>
       )}
 
-      <div>{parsedDishes}</div>
+      <main>{parsedDishes}</main>
     </>
   );
 }
