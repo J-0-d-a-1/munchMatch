@@ -99,22 +99,6 @@ function App() {
                   </OwnerRoute>
                 }
               />
-              {/* <Route
-            path="/user/restaurants/:restaurant_id"
-            element={
-              <OwnerRoute>
-                <RestaurantPage />
-              </OwnerRoute>
-            }
-          />
-          <Route
-            path="/user/restaurants/:restaurant_id/dishes/:dish_id"
-            element={
-              <OwnerRoute>
-                <DishPage />
-              </OwnerRoute>
-            }
-          /> */}
               <Route
                 path="/user/restaurants/new"
                 element={

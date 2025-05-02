@@ -35,7 +35,7 @@ function DishesList() {
       <div className="dish__dedescription">
         <p>{dish.description}</p>
         <div className="photo-list__dish-price">
-          <p>{formatPrice(dish.price_in_cents)}</p>
+          <span>{formatPrice(dish.price_in_cents)}</span>
         </div>
       </div>
     </div>
@@ -44,20 +44,23 @@ function DishesList() {
   return (
     <>
       {restaurant && (
-        <div className="restaurant-header">
-          {restaurant.logo_url && (
-            <img
-              className="restaurant__logo"
-              src={restaurant.logo_url}
-              alt={`${restaurant.name} logo`}
-            />
-          )}
-          <h2>{restaurant.name}</h2>
-          <h5>{restaurant.description}</h5>
-        </div>
+        <section className="restaurant-info">
+          <header>
+            {restaurant.logo_url && (
+              <img
+                className="restaurant__logo"
+                src={restaurant.logo_url}
+                alt={`${restaurant.name} logo`}
+              />
+            )}
+            <h2>{restaurant.name}</h2>
+          </header>
+
+          <p>{restaurant.description}</p>
+        </section>
       )}
 
-      <div>{parsedDishes}</div>
+      <main>{parsedDishes}</main>
     </>
   );
 }
