@@ -1,6 +1,7 @@
 class Api::DishesController < ApplicationController
   before_action :set_dish, only: %i[show update destroy]
-  before_action :require_owner, only: %i[create update destroy] # restrict this actions to owners only
+  before_action :require_owner, only: %i[update destroy] # restrict this actions to owners only
+  before_action :require_restaurant_owner_for_create, only: [:create]
   before_action :set_restaurant, only: %i[index create]
   include Rails.application.routes.url_helpers
 
@@ -69,6 +70,12 @@ class Api::DishesController < ApplicationController
   def require_owner
     unless current_user && @dish&.restaurant&.user_id == current_user.id
       render json: { error: 'You are not the owner of this restaurant or dish not found.' }, status: :not_found
+    end
+  end
+
+  def require_restaurant_owner_for_create
+    unless current_user && Restaurant.exists?(id: params[:restaurant_id], user_id: current_user.id)
+      render json: { error: 'You are not the owner of this restaurant.' }, status: :forbidden
     end
   end
   # rubocop:enable Style/GuardClause

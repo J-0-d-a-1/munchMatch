@@ -390,7 +390,12 @@ function EditRestaurantModal({
               </Form.Control.Feedback>
             </Form.Group>
           </Row>
-          <Button type="submit" disabled={savingRestaurant} className="mb-3">
+          <Button
+            variant="success"
+            type="submit"
+            disabled={savingRestaurant}
+            className="mb-3"
+          >
             {savingRestaurant ? "Saving Restaurant..." : "Update Restaurant"}
           </Button>
           {restaurantSaveError && (
@@ -477,7 +482,7 @@ function EditRestaurantModal({
         <Button variant="secondary" onClick={onHide}>
           Cancel
         </Button>
-        <Button variant="primary" onClick={saveDishes} disabled={savingDishes}>
+        <Button variant="success" onClick={saveDishes} disabled={savingDishes}>
           {savingDishes ? "Saving Dishes..." : "Update Dishes"}
         </Button>
       </Modal.Footer>
