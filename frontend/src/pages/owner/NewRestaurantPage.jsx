@@ -372,7 +372,7 @@ function NewRestaurantPage({ categories }) {
             </Button>
           </fieldset>
         )}
-        <div>
+        <div className="create-buttons">
           <Button
             type="button"
             onClick={saveDishes}

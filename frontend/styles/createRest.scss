@@ -1,3 +1,9 @@
 .create-restaurant {
   margin: 10px;
+
+  .create-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
 }
