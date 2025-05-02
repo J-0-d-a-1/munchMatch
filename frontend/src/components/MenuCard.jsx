@@ -309,7 +309,7 @@ function MenuCard(props) {
             You swiped {lastDirection}
           </h3>
         ) : (
-          <h3 className="light">Swipe a card or press button!</h3>
+          <h4 className="light">Swipe a card or press a button!</h4>
         )}
       </div>
     </div>

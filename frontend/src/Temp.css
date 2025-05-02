@@ -1,9 +1,9 @@
-#root>div {
+/* #root>div {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-}
+} */
 
 .app {
   overflow: hidden;
@@ -116,7 +116,7 @@ h2 {
   transform: scale(1.05);
 }
 */
-/* 
+
 @keyframes popup {
   0% {
     transform: scale(1, 1);
@@ -145,4 +145,4 @@ h2 {
   100% {
     transform: scale(1, 1);
   }
-} */
+}
