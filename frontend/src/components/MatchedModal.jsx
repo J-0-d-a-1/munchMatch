@@ -115,7 +115,7 @@ function MatchedModal(props) {
             variant="primary"
             onClick={() => handleMenuList(dish.restaurant_id)}
           >
-            More menu
+            See menu
           </Button>
         </Modal.Footer>
       </Modal>
