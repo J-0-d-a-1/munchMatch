@@ -1,17 +1,15 @@
-import { Link } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import Container from 'react-bootstrap/Container';
-import Navbar from 'react-bootstrap/Navbar';
-import Nav from 'react-bootstrap/Nav';
+import { Link } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import Container from "react-bootstrap/Container";
+import Navbar from "react-bootstrap/Navbar";
+import Nav from "react-bootstrap/Nav";
+import "../../styles/footer.scss";
 
 function Footer() {
   const { user } = useAuth();
 
   return (
-    <Navbar
-      className="bg-body-tertiary mt-auto"
-      fixed="bottom"
-    >
+    <Navbar className="bg-body-tertiary mt-auto" fixed="bottom">
       <Container>
         <Nav className="w-100 justify-content-around">
           {/* Default view */}

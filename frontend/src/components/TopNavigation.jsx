@@ -37,7 +37,7 @@ function TopNavigation() {
               <Navbar.Text className="me-3">
                 Signed in as: {user.name}
               </Navbar.Text>
-              <Button variant="outline-primary" onClick={handleLogout}>
+              <Button variant="success" onClick={handleLogout}>
                 Logout
               </Button>
             </>
