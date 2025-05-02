@@ -8,8 +8,9 @@ import axios from "axios";
 import "../Temp.css";
 
 function MenuCard(props) {
-  const { currentUser, setCurrentUser } = props;
+  // const { currentUser, setCurrentUser } = props;
 
+  const [currentUser, setCurrentUser] = useState(null);
   const [dishCards, setDishCards] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(null);
   const [lastDirection, setLastDirection] = useState();
@@ -31,7 +32,7 @@ function MenuCard(props) {
     axios
       .get("api/sessions/current", { withCredentials: true })
       .then((res) => {
-        setCurrentUser(res.data);
+        setCurrentUser(res.data.user);
       })
       .catch((err) => console.error(err));
   }, []);
@@ -50,17 +51,19 @@ function MenuCard(props) {
         const { dish_id, right_swipes, left_swipes } = history;
 
         // send POST to backend each item
-        await axios.post(
-          "/api/swipes",
-          {
-            dish_id,
-            right_swipes,
-            left_swipes,
-          },
-          {
-            withCredentials: true,
-          }
-        );
+        if (dish_id && (right_swipes || left_swipes)) {
+          await axios.post(
+            "/api/swipes",
+            {
+              dish_id,
+              right_swipes,
+              left_swipes,
+            },
+            {
+              withCredentials: true,
+            }
+          );
+        }
       }
 
       // clear localstrage

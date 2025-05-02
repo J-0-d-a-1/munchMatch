@@ -17,21 +17,17 @@ function MatchedModal(props) {
 
   // Fetch user's favorite restaurant ids
   useEffect(() => {
-    if (!currentUser) return;
+    if (!currentUser?.id) return;
 
-    const fetchFavorites = async () => {
-      try {
-        const res = await axios.get("/api/favorites");
+    axios
+      .get("/api/favorites")
+      .then((res) => {
+        if (res.length === 0) return;
         const favRestaurantIds = res.data.map((fav) => fav.id);
         setFavoriteIds(favRestaurantIds);
-      } catch (err) {
-        console.error("Error fetching favorites:", err);
-      } finally {
-        setFavoritesLoaded(true);
-      }
-    };
-
-    fetchFavorites();
+      })
+      .catch((err) => console.error("Error fetching favorites:", err))
+      .finally(() => setFavoritesLoaded(true));
   }, [currentUser]);
 
   const isFavorite = favoriteIds.includes(dish.restaurant_id);
@@ -50,8 +46,6 @@ function MatchedModal(props) {
 
     const restaurant_id = dish.restaurant_id;
 
-    console.log("favoriteIds:", favoriteIds);
-    console.log("isFavorite:", isFavorite);
     try {
       if (!isFavorite) {
         // POST /api/favorites
@@ -111,14 +105,12 @@ function MatchedModal(props) {
           <Button variant="danger" onClick={handleCloseModal}>
             Close
           </Button>
-          <Button
-            variant={"success"}
-            onClick={toggleFavorite}
-            disabled={!currentUser}
-          >
-            {isFavorite && "Liked"}
-            {!isFavorite && `Like ${restaurant ? restaurant.name : "..."}`}
-          </Button>
+          {currentUser && (
+            <Button variant={"success"} onClick={toggleFavorite}>
+              {isFavorite && "Liked"}
+              {!isFavorite && `Like ${restaurant ? restaurant.name : "..."}`}
+            </Button>
+          )}
           <Button
             variant="primary"
             onClick={() => handleMenuList(dish.restaurant_id)}
