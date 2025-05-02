@@ -6,6 +6,7 @@ import Button from "react-bootstrap/Button";
 import InputGroup from "react-bootstrap/InputGroup";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import "../../../styles/createRest.scss";
 
 function NewRestaurantPage({ categories }) {
   const navigate = useNavigate();
@@ -172,7 +173,12 @@ function NewRestaurantPage({ categories }) {
   return (
     <div>
       <h1>Create your restaurant here!</h1>
-      <Form noValidate validated={validated} onSubmit={saveRestaurant}>
+      <Form
+        noValidate
+        validated={validated}
+        onSubmit={saveRestaurant}
+        className="create-restaurant"
+      >
         <Form.Group className="mb-3 text-start">
           <Form.Label>Logo</Form.Label>
           <Form.Control
@@ -366,22 +372,24 @@ function NewRestaurantPage({ categories }) {
             </Button>
           </fieldset>
         )}
-        <Button
-          type="button"
-          onClick={saveDishes}
-          disabled={savingDishes || dishes.length === 0}
-          className="mt-3"
-          variant="success"
-        >
-          {savingDishes ? "Saving Dishes..." : "Create"}
-        </Button>
-        {dishesSaveError && (
-          <p className="text-danger mt-2">{dishesSaveError}</p>
-        )}
+        <div>
+          <Button
+            type="button"
+            onClick={saveDishes}
+            disabled={savingDishes || dishes.length === 0}
+            className="mt-3"
+            variant="success"
+          >
+            {savingDishes ? "Saving Dishes..." : "Create"}
+          </Button>
+          {dishesSaveError && (
+            <p className="text-danger mt-2">{dishesSaveError}</p>
+          )}
 
-        <Button onClick={handleCancel} variant="secondary" className="mt-3">
-          Cancel
-        </Button>
+          <Button onClick={handleCancel} variant="secondary" className="mt-3">
+            Cancel
+          </Button>
+        </div>
       </Form>
     </div>
   );
