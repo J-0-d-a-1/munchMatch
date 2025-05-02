@@ -1,7 +1,6 @@
 import "./App.css";
 import TopNavigation from "./components/TopNavigation";
 import Footer from "./components/Footer";
-import Category from "./components/Category";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -25,10 +24,9 @@ import FavoritesPage from "./pages/user/FavoritesPage";
 
 // Page components for restaurant owners
 import OwnerDashboard from "./pages/owner/OwnerDashboard";
-import RestaurantPage from "./pages/owner/RestaurantPage";
-import DishPage from "./pages/owner/DishPage";
+// import RestaurantPage from "./pages/owner/RestaurantPage";
+// import DishPage from "./pages/owner/DishPage";
 import NewRestaurantPage from "./pages/owner/NewRestaurantPage";
-import EditRestaurantPage from "./pages/owner/EditRestaurantPage";
 
 function App() {
   const [categories, setCategories] = useState([]);
@@ -46,71 +44,62 @@ function App() {
       <Router>
         <div className="App">
           <TopNavigation />
-        </div>
-        <Routes>
-          {/* Public routes */}
-          <Route
-            path="/"
-            element={
-              <HomePage
-                categories={categories}
-                currentUser={currentUser}
-                setCurrentUser={setCurrentUser}
+
+          <div className="flex-grow-1">
+            <Routes>
+              {/* Public routes */}
+              <Route path="/" element={<HomePage categories={categories} />} />
+              <Route
+                path="/restaurants/:restaurant_id"
+                element={<RestaurantMenuPage />}
               />
-            }
-          />
-          <Route
-            path="/restaurants/:restaurant_id"
-            element={<RestaurantMenuPage />}
-          />
 
-          {/* Auth routes - only accessible when NOT logged in */}
-          <Route
-            path="/login"
-            element={
-              <PublicOnlyRoute>
-                <LoginPage />
-              </PublicOnlyRoute>
-            }
-          />
-          <Route
-            path="/signup"
-            element={
-              <PublicOnlyRoute>
-                <SignupPage />
-              </PublicOnlyRoute>
-            }
-          />
+              {/* Auth routes - only accessible when NOT logged in */}
+              <Route
+                path="/login"
+                element={
+                  <PublicOnlyRoute>
+                    <LoginPage />
+                  </PublicOnlyRoute>
+                }
+              />
+              <Route
+                path="/signup"
+                element={
+                  <PublicOnlyRoute>
+                    <SignupPage />
+                  </PublicOnlyRoute>
+                }
+              />
 
-          {/* Protected routes - require login */}
-          <Route
-            path="/user"
-            element={
-              <PrivateRoute>
-                <UserPage />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/favorites"
-            element={
-              <PrivateRoute>
-                <FavoritesPage />
-              </PrivateRoute>
-            }
-          />
+              {/* Protected routes - require login */}
+              <Route
+                path="/user"
+                element={
+                  <PrivateRoute>
+                    <UserPage />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/favorites"
+                element={
+                  <PrivateRoute>
+                    <FavoritesPage />
+                  </PrivateRoute>
+                }
+              />
 
-          {/* Owner-only routes */}
-
-          <Route
-            path="/user/restaurants"
-            element={
-              <OwnerRoute>
-                <OwnerDashboard categories={categories} />
-              </OwnerRoute>
-            }
-          />
-          <Route
+              {/* Owner-only routes */}
+              <Route
+                path="/user/restaurants"
+                element={
+                  <OwnerRoute>
+                    <OwnerDashboard categories={categories} />
+                  </OwnerRoute>
+                }
+              />
+              {/* <Route
             path="/user/restaurants/:restaurant_id"
             element={
               <OwnerRoute>
@@ -125,26 +114,21 @@ function App() {
                 <DishPage />
               </OwnerRoute>
             }
-          />
-          <Route
-            path="/user/restaurants/new"
-            element={
-              <OwnerRoute>
-                <NewRestaurantPage categories={categories} />
-              </OwnerRoute>
-            }
-          />
-          <Route
-            path="/user/restaurants/:restaurant_id/edit"
-            element={
-              <OwnerRoute>
-                <EditRestaurantPage />
-              </OwnerRoute>
-            }
-          />
-        </Routes>
+          /> */}
+              <Route
+                path="/user/restaurants/new"
+                element={
+                  <OwnerRoute>
+                    <NewRestaurantPage categories={categories} />
+                  </OwnerRoute>
+                }
+              />
+            </Routes>
+          </div>
+
+          <Footer />
+        </div>
       </Router>
-      {/* <Footer /> */}
     </AuthProvider>
   );
 }

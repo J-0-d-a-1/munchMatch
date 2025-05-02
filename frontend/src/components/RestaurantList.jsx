@@ -3,8 +3,9 @@ import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import DeleteConfirmationModal from "./DeleteConfirmationModal";
 import "../../styles/dashboard.scss";
+import { Link } from "react-router-dom";
 
-const RestaurantList = ({ restaurants, onDelete }) => {
+const RestaurantList = ({ restaurants, onDelete, onEdit }) => {
   const [showModal, setShowModal] = useState(false);
   const [restaurantToDelete, setRestaurantToDelete] = useState(null);
 
@@ -18,9 +19,13 @@ const RestaurantList = ({ restaurants, onDelete }) => {
 
   const parsedRestaurants = restaurants.map((restaurant) => (
     <tr key={restaurant.id}>
-      <td>{restaurant.name}</td>
       <td>
-        <FaEdit className="icon" />
+        <Link to={`/restaurants/${restaurant.id}`} className="restaurant-link">
+          {restaurant.name}
+        </Link>
+      </td>
+      <td>
+        <FaEdit className="icon" onClick={() => onEdit(restaurant.id)} />
       </td>
       <td>
         <MdDelete

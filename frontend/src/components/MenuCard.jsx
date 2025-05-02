@@ -8,7 +8,7 @@ import axios from "axios";
 import "../Temp.css";
 
 function MenuCard(props) {
-  // const { currentUser, setCurrentUser } = props;
+  const { selectedCategory } = props;
 
   const [currentUser, setCurrentUser] = useState(null);
   const [dishCards, setDishCards] = useState([]);
@@ -37,6 +37,7 @@ function MenuCard(props) {
       .catch((err) => console.error(err));
   }, []);
 
+  /*
   // connecting localstorage to database
   const syncSwipeHistoryToDB = async () => {
     // get history from localstrage
@@ -79,16 +80,27 @@ function MenuCard(props) {
       syncSwipeHistoryToDB();
     }
   }, [currentUser]);
-
+*/
   // get the dishes
   useEffect(() => {
-    axios
-      .get("/api/dishes")
-      .then((res) => {
-        setDishCards(res.data);
-      })
-      .catch((err) => console.error(err));
-  }, []);
+    if (!selectedCategory) {
+      // fetching all dishes
+      axios
+        .get("/api/dishes")
+        .then((res) => {
+          setDishCards(res.data);
+        })
+        .catch((err) => console.error(err));
+    } else {
+      // fetching selectedCategory dishes
+      axios
+        .get(`/api/dishes/filterby/${selectedCategory}`)
+        .then((res) => {
+          setDishCards(res.data);
+        })
+        .catch((err) => console.error(err));
+    }
+  }, [selectedCategory]);
 
   // get the curentIndex after fething dishes
   useEffect(() => {
@@ -190,7 +202,7 @@ function MenuCard(props) {
           },
         ];
       }
-
+      /*
       if (currentUser?.id) {
         // storing to DB after login
         const updatedSwipe = updatedHistory.find(
@@ -208,10 +220,10 @@ function MenuCard(props) {
             withCredentials: true,
           }
         );
-      } else {
-        // storing swipeHistory in local sotrage
-        localStorage.setItem("swipeHistory", JSON.stringify(updatedHistory));
-      }
+      } else {*/
+      // storing swipeHistory in local sotrage
+      localStorage.setItem("swipeHistory", JSON.stringify(updatedHistory));
+      // }
 
       return updatedHistory;
     });
