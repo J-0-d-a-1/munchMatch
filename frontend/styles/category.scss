@@ -1,0 +1,29 @@
+.category-container {
+  display: flex;
+  flex-direction: column; /* Arrange the "All" button and categories vertically */
+  align-items: center;
+}
+
+.categories-list {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  margin-top: 16px;
+  cursor: pointer;
+}
+
+.category-item-vertical {
+  display: flex;
+  flex-direction: column; /* Stack image and name vertically within each category */
+  align-items: center; /* Center the image and name horizontally within each category */
+  text-align: center; /* Center the text within its container */
+}
+
+.category-icon {
+  width: 50px;
+  height: 50px;
+}
+
+.category-name {
+  font-size: 0.7em;
+}

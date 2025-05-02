@@ -76,7 +76,7 @@ function MenuCard(props) {
 
   // excute fetching localstrage history
   useEffect(() => {
-    if (currentUser && localStorage.getItem("swipeHistory")) {
+    if (currentUser?.id && localStorage.getItem("swipeHistory")) {
       syncSwipeHistoryToDB();
     }
   }, [currentUser]);

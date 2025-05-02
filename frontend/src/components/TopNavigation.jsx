@@ -4,22 +4,24 @@ import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import Button from "react-bootstrap/Button";
 import axios from "axios";
+import "../../styles/navBar.scss";
+import MunchMatch from "../assets/munchMatch_logo.png";
 
 function TopNavigation() {
   const navigate = useNavigate();
   const { user, setUser } = useAuth();
 
   const handleLogin = () => {
-    navigate('/login');
+    navigate("/login");
   };
-  const handleSignup = () => navigate('/signup');
+  const handleSignup = () => navigate("/signup");
   const handleLogout = async () => {
     try {
       await axios.delete(`/api/sessions/${user.id}`, { withCredentials: true });
       setUser(null);
-      navigate('/');
+      navigate("/");
     } catch (error) {
-      console.error('Logout failed:', error);
+      console.error("Logout failed:", error);
     }
   };
 
@@ -27,7 +29,7 @@ function TopNavigation() {
     <Navbar className="bg-body-tertiary">
       <Container>
         <Navbar.Brand as={Link} to="/" className="cursor-pointer">
-          MunchMatch
+          <img src={MunchMatch} className="brand-icon" />
         </Navbar.Brand>
         <Navbar.Collapse className="justify-content-end">
           {user ? (
