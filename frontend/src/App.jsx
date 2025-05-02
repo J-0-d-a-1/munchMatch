@@ -32,6 +32,7 @@ import EditRestaurantPage from "./pages/owner/EditRestaurantPage";
 
 function App() {
   const [categories, setCategories] = useState([]);
+  const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
     axios
@@ -48,7 +49,16 @@ function App() {
         </div>
         <Routes>
           {/* Public routes */}
-          <Route path="/" element={<HomePage categories={categories} />} />
+          <Route
+            path="/"
+            element={
+              <HomePage
+                categories={categories}
+                currentUser={currentUser}
+                setCurrentUser={setCurrentUser}
+              />
+            }
+          />
           <Route
             path="/restaurants/:restaurant_id"
             element={<RestaurantMenuPage />}

@@ -11,13 +11,64 @@ function MatchedModal(props) {
   const { handleCloseModal, dish, currentUser } = props;
 
   const [restaurant, setRestaurant] = useState(null);
-  const [isFavorite, setIsFavorite] = useState(false);
-
-  const handleFavorite = () => {
-    setIsFavorite((prev) => !prev);
-  };
-
+  const [favoriteIds, setFavoriteIds] = useState([]);
+  const [favoritesLoaded, setFavoritesLoaded] = useState(false);
   const naviation = useNavigate();
+
+  // Fetch user's favorite restaurant ids
+  useEffect(() => {
+    if (!currentUser) return;
+
+    const fetchFavorites = async () => {
+      try {
+        const res = await axios.get("/api/favorites");
+        const favRestaurantIds = res.data.map((fav) => fav.id);
+        setFavoriteIds(favRestaurantIds);
+      } catch (err) {
+        console.error("Error fetching favorites:", err);
+      } finally {
+        setFavoritesLoaded(true);
+      }
+    };
+
+    fetchFavorites();
+  }, [currentUser]);
+
+  const isFavorite = favoriteIds.includes(dish.restaurant_id);
+
+  // toggle favorite
+  const toggleFavorite = async () => {
+    if (!currentUser) {
+      alert("Please log in to like this restaurant");
+      return;
+    }
+
+    if (!favoritesLoaded) {
+      alert("Favorites are still loading. Please wait.");
+      return;
+    }
+
+    const restaurant_id = dish.restaurant_id;
+
+    console.log("favoriteIds:", favoriteIds);
+    console.log("isFavorite:", isFavorite);
+    try {
+      if (!isFavorite) {
+        // POST /api/favorites
+        await axios.post("/api/favorites", {
+          restaurant_id,
+        });
+
+        setFavoriteIds((prev) => [...prev, restaurant_id]);
+      } else {
+        // DELETE /api/favorites/:restaurant_id
+        await axios.delete(`/api/favorites/${restaurant_id}`);
+        setFavoriteIds((prev) => prev.filter((id) => id !== restaurant_id));
+      }
+    } catch (err) {
+      console.error("Error toggling favorite:", err);
+    }
+  };
 
   // fetch the restaurant that has the dish
   useEffect(() => {
@@ -27,6 +78,7 @@ function MatchedModal(props) {
       .catch((err) => console.error(err));
   }, [dish.restaurant_id]);
 
+  // navigate to the menu
   const handleMenuList = (restaurant_id) => {
     naviation(`/restaurants/${restaurant_id}`);
   };
@@ -60,11 +112,12 @@ function MatchedModal(props) {
             Close
           </Button>
           <Button
-            variant={!isFavorite ? "outline-success" : "success"}
-            onClick={handleFavorite}
+            variant={"success"}
+            onClick={toggleFavorite}
+            disabled={!currentUser}
           >
-            {!isFavorite && `Save ${restaurant ? restaurant.name : "..."}`}
-            {isFavorite && "Saved"}
+            {isFavorite && "Liked"}
+            {!isFavorite && `Like ${restaurant ? restaurant.name : "..."}`}
           </Button>
           <Button
             variant="primary"

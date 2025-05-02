@@ -7,8 +7,8 @@ import axios from "axios";
 
 import "../Temp.css";
 
-function MenuCard() {
-  const [currentUser, setCurrentUser] = useState(null);
+function MenuCard(props) {
+  const { currentUser, setCurrentUser } = props;
 
   const [dishCards, setDishCards] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(null);
