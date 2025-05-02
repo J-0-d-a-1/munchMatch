@@ -12,8 +12,8 @@ function Footer() {
   const { user } = useAuth();
 
   return (
-    <Navbar className="bg-body-tertiary mt-auto" fixed="bottom">
-      <Container>
+    <Navbar className="bg-body-tertiary mt-auto">
+      <Container className="footer">
         <Nav className="w-100 justify-content-around">
           {/* Default view */}
           <Nav.Link as={Link} to="/">
