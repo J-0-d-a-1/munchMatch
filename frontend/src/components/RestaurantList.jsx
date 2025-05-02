@@ -18,16 +18,14 @@ const RestaurantList = ({ restaurants, onDelete, onEdit }) => {
   };
 
   const parsedRestaurants = restaurants.map((restaurant) => (
-    <tr key={restaurant.id}>
-      <td>
+    <section key={restaurant.id} className="list-container">
+      <div className="restaurant-link">
         <Link to={`/restaurants/${restaurant.id}`} className="restaurant-link">
           {restaurant.name}
         </Link>
-      </td>
-      <td>
+      </div>
+      <div className="icons_container">
         <FaEdit className="icon" onClick={() => onEdit(restaurant.id)} />
-      </td>
-      <td>
         <MdDelete
           className="icon"
           onClick={() => {
@@ -35,8 +33,8 @@ const RestaurantList = ({ restaurants, onDelete, onEdit }) => {
             setShowModal(true);
           }}
         />
-      </td>
-    </tr>
+      </div>
+    </section>
   ));
 
   return (

@@ -4,6 +4,7 @@ import RestaurantList from "../../components/RestaurantList";
 import { useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import EditRestaurantModal from "../../components/EditRestaurantModal";
+import "../../../styles/dashboard.scss";
 
 const OwnerDashboard = ({ categories }) => {
   const [restaurants, setRestaurants] = useState([]);
@@ -64,25 +65,23 @@ const OwnerDashboard = ({ categories }) => {
     <>
       <div className="dashboard-container">
         <h1>My Dashboard</h1>
-      </div>
-      <Button onClick={handleAddRestaurant}>Add Restaurant</Button>
-      <table>
-        <tbody>
+        <Button onClick={handleAddRestaurant}>Add Restaurant</Button>
+        <div className="restaurants-container">
           <RestaurantList
             restaurants={restaurants}
             onDelete={handleDeleteRestaurant}
             onEdit={handleEditRestaurant}
           />
-        </tbody>
-      </table>
-      <EditRestaurantModal
-        show={showEditModal}
-        onHide={handleCloseEditModal}
-        restaurantIdToEdit={selectedRestaurantId}
-        categories={categories} //to display categories in drop down menu
-        onRestaurantUpdated={handleRestaurantUpdated}
-        onDishesUpdated={handleDishesUpdated}
-      />
+        </div>
+        <EditRestaurantModal
+          show={showEditModal}
+          onHide={handleCloseEditModal}
+          restaurantIdToEdit={selectedRestaurantId}
+          categories={categories} //to display categories in drop down menu
+          onRestaurantUpdated={handleRestaurantUpdated}
+          onDishesUpdated={handleDishesUpdated}
+        />
+      </div>
     </>
   );
 };
