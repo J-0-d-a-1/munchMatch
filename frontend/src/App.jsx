@@ -1,7 +1,6 @@
 import "./App.css";
 import TopNavigation from "./components/TopNavigation";
 import Footer from "./components/Footer";
-import Category from "./components/Category";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -9,7 +8,11 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 // Authorization components
 import { AuthProvider } from "./contexts/AuthContext";
-import { OwnerRoute, PrivateRoute, PublicOnlyRoute } from "./components/authorization/ProtectedRoutes";
+import {
+  OwnerRoute,
+  PrivateRoute,
+  PublicOnlyRoute,
+} from "./components/authorization/ProtectedRoutes";
 
 // Page components for regular users
 import HomePage from "./pages/user/HomePage";
@@ -27,6 +30,7 @@ import NewRestaurantPage from "./pages/owner/NewRestaurantPage";
 
 function App() {
   const [categories, setCategories] = useState([]);
+  const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
     axios
@@ -95,7 +99,7 @@ function App() {
                   </OwnerRoute>
                 }
               />
-                     {/* <Route
+              {/* <Route
             path="/user/restaurants/:restaurant_id"
             element={
               <OwnerRoute>
@@ -121,10 +125,9 @@ function App() {
               />
             </Routes>
           </div>
-          
+
           <Footer />
         </div>
-
       </Router>
     </AuthProvider>
   );

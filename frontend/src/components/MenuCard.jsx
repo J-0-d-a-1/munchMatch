@@ -11,7 +11,6 @@ function MenuCard(props) {
   const { selectedCategory } = props;
 
   const [currentUser, setCurrentUser] = useState(null);
-
   const [dishCards, setDishCards] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(null);
   const [lastDirection, setLastDirection] = useState();
@@ -33,11 +32,12 @@ function MenuCard(props) {
     axios
       .get("api/sessions/current", { withCredentials: true })
       .then((res) => {
-        setCurrentUser(res.data);
+        setCurrentUser(res.data.user);
       })
       .catch((err) => console.error(err));
   }, []);
 
+  /*
   // connecting localstorage to database
   const syncSwipeHistoryToDB = async () => {
     // get history from localstrage
@@ -52,20 +52,20 @@ function MenuCard(props) {
         const { dish_id, right_swipes, left_swipes } = history;
 
         // send POST to backend each item
-        await axios.post(
-          "/api/swipes",
-          {
-            dish_id,
-            right_swipes,
-            left_swipes,
-          },
-          {
-            withCredentials: true,
-          }
-        );
+        if (dish_id && (right_swipes || left_swipes)) {
+          await axios.post(
+            "/api/swipes",
+            {
+              dish_id,
+              right_swipes,
+              left_swipes,
+            },
+            {
+              withCredentials: true,
+            }
+          );
+        }
       }
-
-      console.log("Syncing local swipes to DB");
 
       // clear localstrage
       localStorage.removeItem("swipeHistory");
@@ -80,7 +80,7 @@ function MenuCard(props) {
       syncSwipeHistoryToDB();
     }
   }, [currentUser]);
-
+*/
   // get the dishes
   useEffect(() => {
     if (!selectedCategory) {
@@ -202,7 +202,7 @@ function MenuCard(props) {
           },
         ];
       }
-
+      /*
       if (currentUser?.id) {
         // storing to DB after login
         const updatedSwipe = updatedHistory.find(
@@ -220,10 +220,10 @@ function MenuCard(props) {
             withCredentials: true,
           }
         );
-      } else {
-        // storing swipeHistory in local sotrage
-        localStorage.setItem("swipeHistory", JSON.stringify(updatedHistory));
-      }
+      } else {*/
+      // storing swipeHistory in local sotrage
+      localStorage.setItem("swipeHistory", JSON.stringify(updatedHistory));
+      // }
 
       return updatedHistory;
     });
@@ -257,7 +257,11 @@ function MenuCard(props) {
   return (
     <div>
       {isModalOpen && (
-        <MatchedModal handleCloseModal={handleCloseModal} dish={matchedDish} />
+        <MatchedModal
+          handleCloseModal={handleCloseModal}
+          dish={matchedDish}
+          currentUser={currentUser}
+        />
       )}
       <h1>What are you munching today?</h1>
       <div className="card-container">

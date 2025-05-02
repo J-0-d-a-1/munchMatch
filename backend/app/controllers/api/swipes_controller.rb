@@ -9,15 +9,13 @@ class Api::SwipesController < ApplicationController
 
       render json: @swipes, include: { dish: { only: %i[id name photo_url restaurant_id description] } }
     else
-      render json: { error: 'You not logged in' }, status: :unauthorized
+      render json: { error: 'Unauthorized: User must be logged in' }, status: :unauthorized
     end
   end
 
   # POST api/swipes
   def create
     return render json: { error: 'Unauthorized: User must be logged in to swipe' }, status: :unauthorized unless @user
-
-    Rails.logger.debug "Incoming swipe params: #{params.inspect}"
 
     @swipe = Swipe.find_or_initialize_by(user: @user, dish: @dish)
 
