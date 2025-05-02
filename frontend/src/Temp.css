@@ -1,15 +1,15 @@
-#root > div {
+/* #root>div {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-}
+} */
 
 .app {
   overflow: hidden;
 }
 
-.app > div {
+.app>div {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -39,6 +39,7 @@ h2 {
 .swipe {
   position: absolute;
 }
+
 /*
 .cardContainer {
   width: 90vw;
@@ -120,21 +121,27 @@ h2 {
   0% {
     transform: scale(1, 1);
   }
+
   10% {
     transform: scale(1.1, 1.1);
   }
+
   30% {
     transform: scale(0.9, 0.9);
   }
+
   50% {
     transform: scale(1, 1);
   }
+
   57% {
     transform: scale(1, 1);
   }
+
   64% {
     transform: scale(1, 1);
   }
+
   100% {
     transform: scale(1, 1);
   }

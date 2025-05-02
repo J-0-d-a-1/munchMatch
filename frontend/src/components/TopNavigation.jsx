@@ -27,7 +27,7 @@ function TopNavigation() {
 
   return (
     <Navbar className="bg-body-tertiary">
-      <Container>
+      <Container className="top-navigation">
         <Navbar.Brand as={Link} to="/" className="cursor-pointer">
           <img src={MunchMatch} className="brand-icon" />
         </Navbar.Brand>
@@ -37,7 +37,7 @@ function TopNavigation() {
               <Navbar.Text className="me-3">
                 Signed in as: {user.name}
               </Navbar.Text>
-              <Button variant="outline-primary" onClick={handleLogout}>
+              <Button variant="success" onClick={handleLogout}>
                 Logout
               </Button>
             </>

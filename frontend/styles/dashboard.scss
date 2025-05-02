@@ -1,17 +1,39 @@
-table {
-  font-size: 1.5em;
-  .icon {
-    &:hover {
-      color: green;
-    }
+.dashboard-container {
+  h1 {
+    padding-top: 1em;
   }
+  .list-container {
+    display: flex;
+    flex-direction: row;
+    font-size: 1.2em;
+    align-items: center; // Vertically align items in the row
+    justify-content: space-between; // Put space between the link and the icons
+    padding: 1em;
 
-  .restaurant-link {
-    text-decoration: none; /* Remove the default underline */
-    color: inherit;
-    cursor: pointer; /* Change the cursor to indicate it's clickable */
-    &:hover {
-      color: green;
+    .restaurant-link {
+      padding-right: 1em;
+      justify-content: flex-start;
+    }
+
+    .icons_container {
+      display: flex;
+      gap: 0.8em;
+      justify-content: flex-end;
+      .icon {
+        cursor: pointer;
+        &:hover {
+          color: green;
+        }
+      }
+    }
+
+    .restaurant-link {
+      text-decoration: none; /* Remove the default underline */
+      color: inherit;
+      cursor: pointer;
+      &:hover {
+        color: green;
+      }
     }
   }
 }
