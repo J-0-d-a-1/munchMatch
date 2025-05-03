@@ -1,4 +1,4 @@
-.bg-body-tertiary {
+.footer {
   background-color: #e8613d;
   margin-bottom: 0;
   min-width: 320px;
@@ -8,5 +8,11 @@
     width: 36px;
     height: 36px;
     object-fit: contain;
+  }
+
+  .w-100 {
+    display: flex;
+    align-items: center;
+    height: 70px;
   }
 }
