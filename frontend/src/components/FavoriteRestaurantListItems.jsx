@@ -10,18 +10,26 @@ function FavoriteRestaurantListItems(props) {
     navigation(`/restaurants/${restaurant_id}`);
   };
 
+  const handleHomepage = () => {
+    navigation("/");
+  };
+
   return (
     <div>
       {favoriteRestaurants.length <= 0 && (
-        <>
-          <Link to="/">Keep Munching?</Link>
-        </>
+        <Button variant="primary" onClick={() => handleHomepage()}>
+          Keep Munching?
+        </Button>
       )}
       {favoriteRestaurants.length > 0 &&
         favoriteRestaurants.map((favoriteRestaurant) => {
           return (
             <Card style={{ width: "18rem" }} key={favoriteRestaurant.id}>
-              <Card.Img variant="top" src={favoriteRestaurant.logo_url} />
+              <Card.Img
+                variant="top"
+                src={favoriteRestaurant.logo_url}
+                style={{ maxHeight: "10rem" }}
+              />
               <Card.Body>
                 <Card.Title>{favoriteRestaurant.name}</Card.Title>
                 <Card.Text>{favoriteRestaurant.description}</Card.Text>
