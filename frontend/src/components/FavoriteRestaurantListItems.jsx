@@ -20,14 +20,14 @@ function FavoriteRestaurantListItems(props) {
   return (
     <div className="card-container restaurant-card">
       {favoriteRestaurants.length <= 0 && (
-        <>
+        <div style={{ marginBottom: "0" }}>
           <h3 className="sub-title">No liked restaurants yet...</h3>
           <div className="img-container">
             <Button variant="primary" onClick={() => handleHomepage()}>
               Keep Munching?
             </Button>
           </div>
-        </>
+        </div>
       )}
       {favoriteRestaurants.length > 0 &&
         favoriteRestaurants.map((favoriteRestaurant) => {
