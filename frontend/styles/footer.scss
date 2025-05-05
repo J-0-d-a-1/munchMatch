@@ -1,18 +1,24 @@
-.footer {
-  background-color: #e8613d;
-  margin-bottom: 0;
-  min-width: 320px;
-  max-width: 600px;
+.footer-nav {
+  max-width: 576px;
+  margin-left: auto;
+  margin-right: auto;
 
-  .footer_icon {
-    width: 36px;
-    height: 36px;
-    object-fit: contain;
-  }
+  .footer {
+    background-color: #e8613d;
+    margin-bottom: 0;
+    min-width: 320px;
+    max-width: 600px;
 
-  .w-100 {
-    display: flex;
-    align-items: center;
-    height: 70px;
+    .footer_icon {
+      width: 36px;
+      height: 36px;
+      object-fit: contain;
+    }
+
+    .w-100 {
+      display: flex;
+      align-items: center;
+      height: 70px;
+    }
   }
 }

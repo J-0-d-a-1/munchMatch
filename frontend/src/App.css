@@ -8,7 +8,7 @@
   width: 360px;
   display: grid;
   grid-template-rows: min-content auto min-content;
-  min-height: 100vh
+  min-height: 100vh;
 }
 
 .card {
@@ -22,5 +22,7 @@
 /* Add padding to bottom to prevent content from being hidden by fixed footer */
 .flex-grow-1 {
   padding-top: 20px;
-  padding-bottom: 100px
+  padding-bottom: 100px;
+
+  margin-bottom: 100px;
 }
