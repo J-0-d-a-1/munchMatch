@@ -1,0 +1,30 @@
+.restaurant-card {
+  height: 55vh;
+  margin-bottom: 0;
+}
+
+.sub-title {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.scroll-container {
+  max-height: 80vh;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  padding: 2rem;
+}
+
+.img-container {
+  margin-top: 5rem;
+
+  img {
+    width: 18rem;
+    height: 18rem;
+  }
+}
+
+.fav-card {
+  width: 18rem;
+  margin-bottom: 1rem;
+}

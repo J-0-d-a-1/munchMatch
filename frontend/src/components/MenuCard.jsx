@@ -5,7 +5,7 @@ import { Card, Button } from "react-bootstrap";
 
 import axios from "axios";
 
-import "../Temp.css";
+import "../../styles/dishcard.scss";
 
 function MenuCard(props) {
   const { selectedCategory } = props;
