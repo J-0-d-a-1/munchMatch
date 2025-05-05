@@ -21,16 +21,17 @@ import SignupPage from "./pages/user/SignupPage";
 import UserPage from "./pages/user/UserPage";
 import RestaurantMenuPage from "./pages/user/RestaurantMenuPage";
 import FavoritesPage from "./pages/user/FavoritesPage";
+import RestaurantsPage from "./pages/user/RestaurantsPage";
 
 // Page components for restaurant owners
 import OwnerDashboard from "./pages/owner/OwnerDashboard";
-// import RestaurantPage from "./pages/owner/RestaurantPage";
-// import DishPage from "./pages/owner/DishPage";
 import NewRestaurantPage from "./pages/owner/NewRestaurantPage";
 
 function App() {
   const [categories, setCategories] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
+  const [restaurant, setRestaurant] = useState();
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   useEffect(() => {
     axios
@@ -38,6 +39,10 @@ function App() {
       .then((res) => setCategories(res.data))
       .catch((err) => console.error(err));
   }, []);
+
+  const handleCategorySelect = (categoryId) => {
+    setSelectedCategory(categoryId);
+  };
 
   return (
     <AuthProvider>
@@ -48,10 +53,36 @@ function App() {
           <div className="flex-grow-1">
             <Routes>
               {/* Public routes */}
-              <Route path="/" element={<HomePage categories={categories} />} />
+              <Route
+                path="/"
+                element={
+                  <HomePage
+                    categories={categories}
+                    selectedCategory={selectedCategory}
+                    setSelectedCategory={setSelectedCategory}
+                    handleCategorySelect={handleCategorySelect}
+                  />
+                }
+              />
+              <Route
+                path="/restaurants"
+                element={
+                  <RestaurantsPage
+                    categories={categories}
+                    selectedCategory={selectedCategory}
+                    setSelectedCategory={setSelectedCategory}
+                    handleCategorySelect={handleCategorySelect}
+                  />
+                }
+              />
               <Route
                 path="/restaurants/:restaurant_id"
-                element={<RestaurantMenuPage />}
+                element={
+                  <RestaurantMenuPage
+                    restaurant={restaurant}
+                    setRestaurant={setRestaurant}
+                  />
+                }
               />
 
               {/* Auth routes - only accessible when NOT logged in */}

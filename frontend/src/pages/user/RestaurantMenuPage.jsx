@@ -4,10 +4,9 @@ import axios from "axios";
 import "../../../styles/dish.scss";
 import "../../../styles/menu.scss";
 
-function DishesList() {
+function DishesList({ restaurant, setRestaurant }) {
   const { restaurant_id } = useParams(); // restaurant ID from the URL
   const [dishes, setDishes] = useState([]);
-  const [restaurant, setRestaurant] = useState();
 
   useEffect(() => {
     axios.get(`/api/restaurants/${restaurant_id}`).then((res) => {

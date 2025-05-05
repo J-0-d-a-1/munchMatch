@@ -2,13 +2,15 @@ import { useState } from "react";
 import MenuCard from "../../components/MenuCard";
 import Category from "../../components/Category";
 
-function HomePage({ categories, currentUser, setCurrentUser, handleMenuList }) {
-  const [selectedCategory, setSelectedCategory] = useState(null);
-
-  const handleCategorySelect = (categoryId) => {
-    setSelectedCategory(categoryId);
-  };
-
+function HomePage({
+  categories,
+  currentUser,
+  setCurrentUser,
+  handleMenuList,
+  selectedCategory,
+  setSelectedCategory,
+  handleCategorySelect,
+}) {
   return (
     <div>
       <Category

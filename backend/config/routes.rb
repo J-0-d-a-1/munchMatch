@@ -8,6 +8,8 @@ Rails.application.routes.draw do
       end
     end
     resources :categories, only: %i[index show]
+    get '/restaurants/all', to: 'restaurants#all'
+    get '/restaurants/filterby/:category_id', to: 'restaurants#category'
     resources :restaurants do
       resources :dishes, only: %i[create index]
     end
