@@ -5,20 +5,20 @@ class Api::RestaurantsController < ApplicationController
 
   # GET /api/restaurants/all
   def all
-    @restaurants = Restaurant.all
+    @restaurants = Restaurant.order(name: :asc)
     render json: @restaurants.map { |restaurant| restaurant_with_logo_url(restaurant) }
   end
 
   # GET /api/restaurants/filterby/:category_id
   # Show all restaurants of the category
   def category
-    @restaurants = Restaurant.where(category_id: params[:category_id]).with_attached_logo
+    @restaurants = Restaurant.where(category_id: params[:category_id]).order(name: :asc).with_attached_logo
     render json: @restaurants.map { |restaurant| restaurant_with_logo_url(restaurant) }
   end
 
   # GET /api/restaurants
   def index
-    @restaurants = current_user.restaurants
+    @restaurants = current_user.restaurants.order(name: :asc)
     render json: @restaurants.map { |restaurant| restaurant_with_logo_url(restaurant) }
   end
 
