@@ -303,7 +303,7 @@ function NewRestaurantPage({ categories }) {
 
         {restaurantId && (
           <fieldset className="mb-3 text-start mt-3">
-            <legend>Add Dishes</legend>
+            {/* <legend>Add Dishes</legend> */}
             {dishes.map((dish, index) => (
               <div key={index}>
                 <Form.Group className="position-relative mb-3">
@@ -363,12 +363,12 @@ function NewRestaurantPage({ categories }) {
                   onClick={() => handleDeleteDish(index)}
                   className="mb-3 text-end"
                 >
-                  Delete dish
+                  Remove dish
                 </Button>
               </div>
             ))}
             <Button type="button" onClick={handleAddDish}>
-              Add dish
+              +
             </Button>
           </fieldset>
         )}
@@ -380,7 +380,7 @@ function NewRestaurantPage({ categories }) {
             className="mt-3"
             variant="success"
           >
-            {savingDishes ? "Saving Dishes..." : "Create"}
+            {savingDishes ? "Saving Dishes..." : "Save"}
           </Button>
           {dishesSaveError && (
             <p className="text-danger mt-2">{dishesSaveError}</p>

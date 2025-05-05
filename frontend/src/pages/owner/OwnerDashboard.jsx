@@ -64,7 +64,7 @@ const OwnerDashboard = ({ categories }) => {
   return (
     <>
       <div className="dashboard-container">
-        <h1>My Dashboard</h1>
+        <h1>My Restaurants</h1>
         <Button onClick={handleAddRestaurant}>Add Restaurant</Button>
         <div className="restaurants-container">
           <RestaurantList

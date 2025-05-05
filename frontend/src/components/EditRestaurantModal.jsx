@@ -263,9 +263,7 @@ function EditRestaurantModal({
 
   return (
     <Modal show={show} onHide={onHide} size="lg">
-      <Modal.Header closeButton>
-        <Modal.Title>Edit Restaurant and Dishes</Modal.Title>
-      </Modal.Header>
+      <Modal.Header closeButton></Modal.Header>
       <Modal.Body>
         <h2>Edit Restaurant</h2>
         <Form noValidate validated={validated} onSubmit={saveRestaurant}>
@@ -472,7 +470,7 @@ function EditRestaurantModal({
           </div>
         ))}
         <Button type="button" onClick={handleAddDish} className="mb-3">
-          Add dish
+          +
         </Button>
         {dishesSaveError && (
           <p className="text-danger mt-2">{dishesSaveError}</p>
@@ -483,7 +481,7 @@ function EditRestaurantModal({
           Cancel
         </Button>
         <Button variant="success" onClick={saveDishes} disabled={savingDishes}>
-          {savingDishes ? "Saving Dishes..." : "Update Dishes"}
+          {savingDishes ? "Saving Dishes..." : "Save"}
         </Button>
       </Modal.Footer>
     </Modal>
