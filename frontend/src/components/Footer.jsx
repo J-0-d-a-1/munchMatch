@@ -4,7 +4,7 @@ import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import "../../styles/footer.scss";
-import { CgProfile } from "react-icons/cg";
+import { MdOutlineDashboard } from "react-icons/md";
 import { FaHeart } from "react-icons/fa";
 import { IoSearch } from "react-icons/io5";
 
@@ -36,7 +36,7 @@ function Footer() {
           {user?.is_owner && (
             <Nav.Link as={Link} to="/user/restaurants">
               <div className="restaurants">
-                <CgProfile className="footer_icon" />
+                <MdOutlineDashboard className="footer_icon" />
               </div>
             </Nav.Link>
           )}
