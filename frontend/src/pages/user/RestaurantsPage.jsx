@@ -40,7 +40,6 @@ function RestaurantsPage({
 
   return (
     <>
-      <h1>Restaurants page</h1>
       <Category
         categories={categories}
         onSelectCategory={handleCategorySelect}
