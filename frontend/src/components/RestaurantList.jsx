@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { MdDelete } from "react-icons/md";
-import { FaEdit } from "react-icons/fa";
 import DeleteConfirmationModal from "./DeleteConfirmationModal";
 import "../../styles/dashboard.scss";
 import { Link } from "react-router-dom";
+import { Button } from "react-bootstrap";
 
 const RestaurantList = ({ restaurants, onDelete, onEdit }) => {
   const [showModal, setShowModal] = useState(false);
@@ -25,14 +24,18 @@ const RestaurantList = ({ restaurants, onDelete, onEdit }) => {
         </Link>
       </div>
       <div className="icons_container">
-        <FaEdit className="icon" onClick={() => onEdit(restaurant.id)} />
-        <MdDelete
-          className="icon"
+        <Button variant="warning" onClick={() => onEdit(restaurant.id)}>
+          Edit
+        </Button>
+        <Button
+          variant="danger"
           onClick={() => {
             setRestaurantToDelete(restaurant);
             setShowModal(true);
           }}
-        />
+        >
+          Delete
+        </Button>
       </div>
     </section>
   ));
