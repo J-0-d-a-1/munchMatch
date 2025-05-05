@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Category from "../../components/Category";
 import { Button, Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import "../../../styles/restaurantsPage.scss";
 
 function RestaurantsPage({
   categories,
@@ -44,7 +45,7 @@ function RestaurantsPage({
         categories={categories}
         onSelectCategory={handleCategorySelect}
       />
-      <section>
+      <section className="all_restaurants-container">
         {allRestaurants.map((restaurant) => {
           return (
             <Card key={restaurant.id} className="fav-card">
