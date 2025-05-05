@@ -12,14 +12,22 @@ function HomePage({
   handleCategorySelect,
 }) {
   return (
-    <div>
-      <Category
-        categories={categories}
-        onSelectCategory={handleCategorySelect}
-        selectedCategory={selectedCategory}
-      />
-      <MenuCard selectedCategory={selectedCategory} />
-    </div>
+    <>
+      <div>
+        <Category
+          categories={categories}
+          onSelectCategory={handleCategorySelect}
+          selectedCategory={selectedCategory}
+        />
+        <MenuCard selectedCategory={selectedCategory} />
+      </div>
+      <div className="references">
+        Icons by{" "}
+        <a href="https://icons8.com/" target="_blank">
+          Icons8
+        </a>
+      </div>
+    </>
   );
 }
 
