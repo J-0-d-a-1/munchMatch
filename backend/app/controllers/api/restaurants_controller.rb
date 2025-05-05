@@ -3,6 +3,19 @@ class Api::RestaurantsController < ApplicationController
   before_action :require_owner, only: %i[index create update destroy] # restrict this actions to owners only
   include Rails.application.routes.url_helpers
 
+  # GET /api/restaurants/all
+  def all
+    @restaurants = Restaurant.all
+    render json: @restaurants.map { |restaurant| restaurant_with_logo_url(restaurant) }
+  end
+
+  # GET /api/restaurants/filterby/:category_id
+  # Show all restaurants of the category
+  def category
+    @restaurants = Restaurant.where(category_id: params[:category_id]).with_attached_logo
+    render json: @restaurants.map { |restaurant| restaurant_with_logo_url(restaurant) }
+  end
+
   # GET /api/restaurants
   def index
     @restaurants = current_user.restaurants
