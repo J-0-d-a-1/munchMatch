@@ -4,9 +4,9 @@ import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import "../../styles/footer.scss";
-import { FaUnlockKeyhole } from "react-icons/fa6";
+import { CgProfile } from "react-icons/cg";
 import { FaHeart } from "react-icons/fa";
-import { FaSearch } from "react-icons/fa";
+import { IoSearch } from "react-icons/io5";
 
 function Footer() {
   const { user } = useAuth();
@@ -22,7 +22,7 @@ function Footer() {
           {/* Default view */}
           <Nav.Link as={Link} to="/restaurants">
             <div className="home">
-              <FaSearch className="footer_icon" />
+              <IoSearch className="footer_icon" />
             </div>
           </Nav.Link>
           <Nav.Link as={Link} to="/favorites">
@@ -34,7 +34,7 @@ function Footer() {
           {user?.is_owner && (
             <Nav.Link as={Link} to="/user/restaurants">
               <div className="restaurants">
-                <FaUnlockKeyhole className="footer_icon" />
+                <CgProfile className="footer_icon" />
               </div>
             </Nav.Link>
           )}
