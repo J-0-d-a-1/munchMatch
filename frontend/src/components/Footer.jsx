@@ -12,7 +12,11 @@ function Footer() {
   const { user } = useAuth();
 
   return (
-    <Navbar className="bg-body-tertiary mt-auto">
+    <Navbar
+      className="bg-body-tertiary footer-nav"
+      fixed="bottom"
+      style={{ paddingTop: "0", paddingBottom: "0" }}
+    >
       <Container className="footer">
         <Nav className="w-100 justify-content-around">
           {/* Default view */}
