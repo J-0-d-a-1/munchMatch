@@ -11,6 +11,19 @@
   min-height: 100vh;
 }
 
+.references {
+  position: absolute;
+  bottom: 80px;
+  /* Adjust this value as needed for vertical spacing from the bottom */
+  left: 50%;
+  /* Move the left edge of the element to the horizontal center */
+  transform: translateX(-50%);
+  /* Shift the element back by half of its own width */
+  font-size: xx-small;
+  width: auto;
+  text-align: center;
+}
+
 .card {
   padding: 1em;
 }
