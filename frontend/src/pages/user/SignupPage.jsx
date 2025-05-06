@@ -152,7 +152,7 @@ function SignupPage() {
               Sign Up
             </Button>
 
-            <Form.Text className="text-center d-block mt-3">
+            <Form.Text className="text-center d-block mt-4" style={{ fontSize: "1rem" }}>
               Already have an account? <Link to="/login">Log In</Link>
             </Form.Text>
 

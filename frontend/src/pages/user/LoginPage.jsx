@@ -74,7 +74,7 @@ function LoginPage() {
               Login
             </Button>
 
-            <Form.Text className="text-center d-block mt-3">
+            <Form.Text className="text-center d-block mt-4" style={{ fontSize: "1rem" }}>
               New to MunchMatch? <Link to="/signup">Sign Up</Link>
             </Form.Text>
             
