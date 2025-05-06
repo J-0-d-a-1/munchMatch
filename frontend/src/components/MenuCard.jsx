@@ -8,7 +8,8 @@ import axios from "axios";
 import "../../styles/dishcard.scss";
 
 function MenuCard(props) {
-  const { selectedCategory } = props;
+  const { selectedCategory, favoritesIds, favoritesLoaded, toggleFavorite } =
+    props;
 
   const [currentUser, setCurrentUser] = useState(null);
   const [dishCards, setDishCards] = useState([]);
