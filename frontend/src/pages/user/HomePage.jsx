@@ -1,8 +1,12 @@
-import { useState } from "react";
 import MenuCard from "../../components/MenuCard";
 import Category from "../../components/Category";
 
-function HomePage({ categories, selectedCategory, handleCategorySelect }) {
+function HomePage({
+  currentUser,
+  categories,
+  selectedCategory,
+  handleCategorySelect,
+}) {
   return (
     <>
       <div>
@@ -11,7 +15,10 @@ function HomePage({ categories, selectedCategory, handleCategorySelect }) {
           onSelectCategory={handleCategorySelect}
           selectedCategory={selectedCategory}
         />
-        <MenuCard selectedCategory={selectedCategory} />
+        <MenuCard
+          currentUser={currentUser}
+          selectedCategory={selectedCategory}
+        />
       </div>
       <div className="references">
         Icons by{" "}

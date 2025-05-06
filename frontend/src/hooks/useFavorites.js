@@ -52,7 +52,6 @@ export default function useFavorites(currentUser) {
 
   return {
     favoriteIds,
-    favoritesLoaded,
     toggleFavorite,
   };
 }
