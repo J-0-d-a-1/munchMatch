@@ -2,10 +2,10 @@
 
 ## Table of contents
 - [What is MunchMatch?](#what-is-munchmatch)
-- [Tech Stack 👨‍💻](#tech-stack)
-- [Setup 🛠️](#setup)
+- [Tech Stack](#tech-stack)
+- [Setup](#setup)
 - [Final product](#final-product)
-- [The MunchMatch team 👩🏻🧒🏻👦🏻](#the-munchmatch-team)
+- [The MunchMatch team](#the-munchmatch-team)
 
 ## What is MunchMatch?
 
@@ -22,7 +22,7 @@ Create an account and unlock a world of foodie possibilities:
     * Add, edit, and delete the mouthwatering dishes on your menu.
     * Did we mention you can also add images? 💅🏻
 
-## Tech Stack 👨‍💻
+## Tech Stack
 
 MunchMatch is built with a delectable blend of technologies:
 
@@ -45,7 +45,7 @@ MunchMatch is built with a delectable blend of technologies:
 * **Bcrypt:** Ensuring your passwords are safe. 🔐
 * **Active Storage & Image Processing:** For all those mouthwatering restaurant and dish photos.
 
-## Setup 🛠️
+## Setup
 
 Ready to experience MunchMatch locally? Follow these simple steps:
 
@@ -62,6 +62,6 @@ Ready to experience MunchMatch locally? Follow these simple steps:
 !["Edit"](<https://github.com/J-0-d-a-1/munchMatch/blob/main/frontend/public/edit_modal.png>)
 !["Create"](<https://github.com/J-0-d-a-1/munchMatch/blob/main/frontend/public/create_restaurant.png>)
 
-## The MunchMatch team 👩🏻🧒🏻👦🏻
+## The MunchMatch team
 
 MunchMatch was born from the collective hard-work and late-night coding sessions of a group of dedicated students at Lighthouse Labs (LHL) bootcamp. It represents the culmination of our skills and a testament to the power of teamwork!
