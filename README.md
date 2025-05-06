@@ -3,8 +3,6 @@
 ## Table of contents
 - [What is MunchMatch?](#what-is-munchmatch)
 - [Tech Stack 👨‍💻](#tech-stack)
-- [Frontend](#frontend)
-- [Backend](#backend)
 - [Setup 🛠️](#setup)
 - [Final product](#final-product)
 - [The MunchMatch team 👩🏻🧒🏻👦🏻](#the-munchmatch-team)
