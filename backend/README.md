@@ -1,24 +1,23 @@
-# README
+We use ruby version 3.1.1 and rails, '~> 7.1' for this project
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+1.  **Clone the Repository:**
+    ```bash
+    git clone <https://github.com/J-0-d-a-1/munchMatch.git>
+    cd MunchMatch
+    ```
+2.  **Install Backend Dependencies:**
+    ```bash
+    cd backend
+    bundle install
+    ```
+3.  **Set up the Database:**
+    ```bash
+    rails db:create
+    rails db:migrate
+    ```
+4.  **Configure Environment Variables:**
+    - Create a `.env` file based on the `env.example`.
+5.  **Start the Rails Server:**
+    ```bash
+    bin/rails server
+    ```
