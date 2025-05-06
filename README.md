@@ -13,7 +13,7 @@ MunchMatch is here to rescue you from the endless scroll of restaurant reviews! 
 
 ## But wait, there's more! (For the commitment-ready)
 
-Create an account and unlock a world of foodie possibilities:
+Create an account and unlock a world of foodie possibilities: 
 
 * Add restaurants to your "Favorites" list and build your personal collection.
 * Easily browse all your favorite restaurants in one convenient place.
@@ -24,7 +24,7 @@ Create an account and unlock a world of foodie possibilities:
 
 ## Tech Stack
 
-MunchMatch is built with a delectable blend of technologies:
+MunchMatch is built with a delectable blend of technologies: 💻
 
 **Frontend**
 
@@ -47,7 +47,7 @@ MunchMatch is built with a delectable blend of technologies:
 
 ## Setup
 
-Ready to experience MunchMatch locally? Follow these simple steps:
+Ready to experience MunchMatch locally? Follow these simple steps: 
 
 * [Front end](./frontend/README.md)
 * [Back end](./backend/README.md)
@@ -64,4 +64,4 @@ Ready to experience MunchMatch locally? Follow these simple steps:
 
 ## The MunchMatch team
 
-MunchMatch was born from the collective hard-work and late-night coding sessions of a group of dedicated students at Lighthouse Labs (LHL) bootcamp. It represents the culmination of our skills and a testament to the power of teamwork!
+MunchMatch was born from the collective hard-work and late-night coding sessions of a group of dedicated students at Lighthouse Labs (LHL) bootcamp. It represents the culmination of our skills and a testament to the power of teamwork! 🧒🏻👩🏻👦🏻
