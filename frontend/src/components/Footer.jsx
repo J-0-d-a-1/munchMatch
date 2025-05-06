@@ -24,12 +24,12 @@ function Footer() {
             <div className="home">
               <IoSearch className="footer_icon" />
             </div>
-          </Nav.Link>          
-            <Nav.Link as={Link} to="/favorites">
-              <div className="favorites">
-                <FaHeart className="footer_icon" />
-              </div>
-            </Nav.Link>         
+          </Nav.Link>
+          <Nav.Link as={Link} to="/favorites">
+            <div className="favorites">
+              <FaHeart className="footer_icon" />
+            </div>
+          </Nav.Link>
           {/* Owner view */}
           {user?.is_owner && (
             <Nav.Link as={Link} to="/user/restaurants">
