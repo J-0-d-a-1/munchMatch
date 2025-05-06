@@ -1,6 +1,6 @@
 1.  **Install Frontend Dependencies:**
     ```bash
-    cd ../frontend
+    cd frontend
     npm install
     ```
 2.  **Start the React Development Server:**
