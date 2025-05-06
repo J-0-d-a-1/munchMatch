@@ -1,13 +1,13 @@
 # MunchMatch: Find your culinary soulmate! 🍽️❤️
 
 ## Table of contents
-- [What is MunchMatch?](#what-is-munchmatch?)
-- [Tech Stack 👨‍💻](#tech-stack-👨‍💻)
+- [What is MunchMatch?](#what-is-munchmatch)
+- [Tech Stack 👨‍💻](#tech-stack)
 - [Frontend](#frontend)
 - [Backend](#backend)
-- [Setup 🛠️](#setup-🛠️)
+- [Setup 🛠️](#setup)
 - [Final product](#final-product)
-- [The MunchMatch team 👩🏻🧒🏻👦🏻](#the-munchmatch-team-👩🏻🧒🏻👦🏻)
+- [The MunchMatch team 👩🏻🧒🏻👦🏻](#the-munchmatch-team)
 
 ## What is MunchMatch?
 
