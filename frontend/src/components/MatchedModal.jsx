@@ -65,7 +65,12 @@ function MatchedModal(props) {
             Close
           </Button>
           {currentUser && (
-            <Button variant={"success"} onClick={handleFavorite}>
+            <Button
+              variant={isFavorite ? "success" : "outline-success"}
+              onClick={handleFavorite}
+              onTouchEnd={(e) => e.target.blur()}
+              onMouseUp={(e) => e.target.blur()}
+            >
               {isFavorite && "Liked"}
               {!isFavorite && `Like ${restaurant ? restaurant.name : "..."}`}
             </Button>
