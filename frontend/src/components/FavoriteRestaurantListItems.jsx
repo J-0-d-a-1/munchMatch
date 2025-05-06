@@ -1,13 +1,20 @@
-import { Button, Card } from "react-bootstrap";
+import { Button, Card, Stack } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 import "../../styles/dishcard.scss";
 import "../../styles/restaurantcard.scss";
+import useFavorites from "../hooks/useFavorites";
 
 function FavoriteRestaurantListItems(props) {
-  const { favoriteRestaurants } = props;
+  const { currentUser, favoriteRestaurants } = props;
+
+  const { favoriteIds, toggleFavorite } = useFavorites(currentUser);
 
   const navigation = useNavigate();
+
+  const isFavorite = (id) => {
+    return favoriteIds.includes(id);
+  };
 
   const handleMenuList = (restaurant_id) => {
     navigation(`/restaurants/${restaurant_id}`);
@@ -41,12 +48,29 @@ function FavoriteRestaurantListItems(props) {
               <Card.Body>
                 <Card.Title>{favoriteRestaurant.name}</Card.Title>
                 <Card.Text>{favoriteRestaurant.description}</Card.Text>
-                <Button
-                  variant="primary"
-                  onClick={() => handleMenuList(favoriteRestaurant.id)}
-                >
-                  See menu
-                </Button>
+                <Stack direction="horizontal" gap={5}>
+                  <Button
+                    variant={
+                      isFavorite(favoriteRestaurant.id)
+                        ? "success"
+                        : "outline-success"
+                    }
+                    style={{ marginLeft: "0.6rem" }}
+                    onClick={() => {
+                      toggleFavorite(favoriteRestaurant.id);
+                    }}
+                    onTouchEnd={(e) => e.target.blur()}
+                    onMouseUp={(e) => e.target.blur()}
+                  >
+                    {isFavorite(favoriteRestaurant.id) ? "Liked" : "Like"}
+                  </Button>
+                  <Button
+                    variant="primary"
+                    onClick={() => handleMenuList(favoriteRestaurant.id)}
+                  >
+                    See menu
+                  </Button>
+                </Stack>
               </Card.Body>
             </Card>
           );

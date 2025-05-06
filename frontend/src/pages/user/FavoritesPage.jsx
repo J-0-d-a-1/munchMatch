@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import FavoriteRestaurantListItems from "../../components/FavoriteRestaurantListItems";
 
-function FavoritesPage() {
+function FavoritesPage({ currentUser }) {
   const [favoriteRestaurants, setFavoriteRestaurants] = useState([]);
 
   useEffect(() => {
@@ -15,7 +15,10 @@ function FavoritesPage() {
   return (
     <div>
       <h1>Favorites</h1>
-      <FavoriteRestaurantListItems favoriteRestaurants={favoriteRestaurants} />
+      <FavoriteRestaurantListItems
+        currentUser={currentUser}
+        favoriteRestaurants={favoriteRestaurants}
+      />
     </div>
   );
 }

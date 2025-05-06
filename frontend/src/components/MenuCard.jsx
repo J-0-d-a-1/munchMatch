@@ -8,9 +8,8 @@ import axios from "axios";
 import "../../styles/dishcard.scss";
 
 function MenuCard(props) {
-  const { selectedCategory } = props;
+  const { currentUser, selectedCategory } = props;
 
-  const [currentUser, setCurrentUser] = useState(null);
   const [dishCards, setDishCards] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(null);
   const [lastDirection, setLastDirection] = useState();
@@ -26,16 +25,6 @@ function MenuCard(props) {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
-
-  // get current user
-  useEffect(() => {
-    axios
-      .get("api/sessions/current", { withCredentials: true })
-      .then((res) => {
-        setCurrentUser(res.data.user);
-      })
-      .catch((err) => console.error(err));
-  }, []);
 
   /*
   // connecting localstorage to database

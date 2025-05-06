@@ -33,6 +33,16 @@ function App() {
   const [restaurant, setRestaurant] = useState();
   const [selectedCategory, setSelectedCategory] = useState(null);
 
+  // get current user
+  useEffect(() => {
+    axios
+      .get("api/sessions/current", { withCredentials: true })
+      .then((res) => {
+        setCurrentUser(res.data.user);
+      })
+      .catch((err) => console.error(err));
+  }, []);
+
   useEffect(() => {
     axios
       .get("/api/categories")
@@ -57,6 +67,7 @@ function App() {
                 path="/"
                 element={
                   <HomePage
+                    currentUser={currentUser}
                     categories={categories}
                     selectedCategory={selectedCategory}
                     setSelectedCategory={setSelectedCategory}
@@ -116,7 +127,7 @@ function App() {
                 path="/favorites"
                 element={
                   <PrivateRoute>
-                    <FavoritesPage />
+                    <FavoritesPage currentUser={currentUser} />
                   </PrivateRoute>
                 }
               />
