@@ -85,7 +85,7 @@ class Api::DishesController < ApplicationController
   end
 
   def dish_params
-    params.require(:dish).permit(:name, :description, :restaurant_id, :photo)
+    params.require(:dish).permit(:name, :description, :restaurant_id, :photo, :price_in_cents)
   end
 
   def dish_with_photo_url(dish)

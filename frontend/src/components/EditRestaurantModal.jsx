@@ -159,7 +159,11 @@ function EditRestaurantModal({
           const dishFormData = new FormData();
           dishFormData.append("dish[name]", dish.name);
           dishFormData.append("dish[description]", dish.description);
-          dishFormData.append("dish[price]", dish.price);
+          const priceInCents = parseFloat(dish.price) * 100;
+          dishFormData.append(
+            "dish[price_in_cents]",
+            isNaN(priceInCents) ? 0 : Math.round(priceInCents)
+          ); // Convert to cents
           if (dish.photo) {
             dishFormData.append("dish[photo]", dish.photo);
           }
@@ -206,15 +210,21 @@ function EditRestaurantModal({
     if (name.startsWith("dishes")) {
       const index = parseInt(name.match(/\d+/)[0], 10);
       const field = name.split(".")[1];
+      const updatedDishes = [...dishes];
 
-      setDishes((prevDishes) => {
-        const updatedDishes = [...prevDishes];
+      if (field === "price") {
+        // Store the dollar value
+        updatedDishes[index] = {
+          ...updatedDishes[index],
+          [field]: value,
+        };
+      } else {
         updatedDishes[index] = {
           ...updatedDishes[index],
           [field]: type === "file" ? files[0] : value,
         };
-        return updatedDishes;
-      });
+      }
+      setDishes(updatedDishes);
     } else {
       setRestaurantData((prevData) => ({
         ...prevData,
@@ -238,7 +248,6 @@ function EditRestaurantModal({
 
     // if they delete an already existing dish, call DELETE API
     if (dishToDelete.id) {
-      // sretch show a confirmation dialog before deleting
       axios
         .delete(`/api/dishes/${dishToDelete.id}`)
         .then((response) => {
