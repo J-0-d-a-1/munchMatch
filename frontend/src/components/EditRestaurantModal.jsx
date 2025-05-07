@@ -163,7 +163,7 @@ function EditRestaurantModal({
           dishFormData.append(
             "dish[price_in_cents]",
             isNaN(priceInCents) ? 0 : Math.round(priceInCents)
-          ); // Convert to cents here
+          ); // Convert to cents
           if (dish.photo) {
             dishFormData.append("dish[photo]", dish.photo);
           }
@@ -213,7 +213,7 @@ function EditRestaurantModal({
       const updatedDishes = [...dishes];
 
       if (field === "price") {
-        // Store the dollar value directly in the state for display
+        // Store the dollar value
         updatedDishes[index] = {
           ...updatedDishes[index],
           [field]: value,
@@ -248,7 +248,6 @@ function EditRestaurantModal({
 
     // if they delete an already existing dish, call DELETE API
     if (dishToDelete.id) {
-      // sretch show a confirmation dialog before deleting
       axios
         .delete(`/api/dishes/${dishToDelete.id}`)
         .then((response) => {
