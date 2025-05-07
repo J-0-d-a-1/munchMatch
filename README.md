@@ -53,14 +53,14 @@ Ready to experience MunchMatch locally? Follow these simple steps:
 * [Back end](./backend/README.md)
 
 ## Final product 
-!["Main page"](<https://github.com/J-0-d-a-1/munchMatch/blob/main/frontend/public/home_page.png>)
-!["Matched modal](<https://github.com/J-0-d-a-1/munchMatch/blob/main/frontend/public/matched_page.png>)
-!["Register](<https://github.com/J-0-d-a-1/munchMatch/blob/main/frontend/public/register.png>)
-!["Login"](<https://github.com/J-0-d-a-1/munchMatch/blob/main/frontend/public/login.png>)
-!["Favorites](<https://github.com/J-0-d-a-1/munchMatch/blob/main/frontend/public/favorites.png>)
-!["Owner dashboard](<https://github.com/J-0-d-a-1/munchMatch/blob/main/frontend/public/owner_dashboard.png>)
-!["Edit"](<https://github.com/J-0-d-a-1/munchMatch/blob/main/frontend/public/edit_modal.png>)
-!["Create"](<https://github.com/J-0-d-a-1/munchMatch/blob/main/frontend/public/create_restaurant.png>)
+Signup and Login\
+!["Signup and Login"]()\
+Swipe and Favorites\
+!["Swipe and Favorites"]()\
+Create a restaurant\
+!["Create a restaurant"]()\
+Edit a restaurant\
+!["Edit a restaurant"]()
 
 ## The MunchMatch team
 
